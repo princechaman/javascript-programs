@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <style>
+            .productDiv{
+                border: 1px solid black;
+                margin: 10px;
+                padding: 10px;
+            }
+        </style>
+    </head>
+<body>
+ <h1>Fetch and Display JSON Data</h1>
+  <button id="fetchButton">Fetch Data</button>
+  <div id="jsonData"></div>
+  
+  <script>
+    let button = document.getElementById('fetchButton');
+    let mainDiv = document.getElementById('jsonData');
+    button.addEventListener('click',()=>{
+        fetch('https://api.sampleapis.com/coffee/hot')
+        .then(response => response.json()) 
+        .then(data=>{
+            console.log(data);
+            for(let value of data){
+                let div = document.createElement('div');
+                div.classList.add('productDiv');
+                div.innerHTML = `
+                    <h3>${value.title}</h3>
+                    <p>${value.description}</p>
+                    <img hieght="100px" width="200px" src="${value.image}">
+                `;
+                mainDiv.appendChild(div);
+            }
+        })
+    }); 
+  </script>
+</body>
+</html>

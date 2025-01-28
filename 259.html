@@ -1,0 +1,17 @@
+<html>
+<body>
+  <div id="myDiv">Hover over me!</div>
+
+  <script>
+    const mydiv = document.getElementById('myDiv');
+    mydiv.addEventListener('mouseover', () => {
+        mydiv.style.backgroundColor = 'lightblue'; 
+    });
+
+    mydiv.addEventListener('mouseout', () => {
+        mydiv.style.backgroundColor = 'pink'; 
+    });
+    
+  </script>
+</body>
+</html>

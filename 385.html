@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookmark Manager</title>
+</head>
+<body>
+
+<h1>Bookmark Manager</h1>
+
+<h2>Add Bookmark</h2>
+<label for="bookmarkTitle">Title:</label>
+<input type="text" id="bookmarkTitle" placeholder="Enter bookmark title"><br><br>
+
+<label for="bookmarkURL">URL:</label>
+<input type="text" id="bookmarkURL" placeholder="Enter bookmark URL"><br><br>
+
+<label for="bookmarkCategory">Category:</label>
+<select id="bookmarkCategory">
+    <option value="Work">Work</option>
+    <option value="Education">Education</option>
+    <option value="Entertainment">Entertainment</option>
+    <option value="Personal">Personal</option>
+</select><br><br>
+
+<button id="addBookmarkButton">Add Bookmark</button>
+
+<h2>Bookmarks</h2>
+<div id="bookmarkContainer"></div>
+
+<script>
+    const bookmarkTitle = document.getElementById('bookmarkTitle');
+    const bookmarkURL = document.getElementById('bookmarkURL');
+    const bookmarkCategory = document.getElementById('bookmarkCategory');
+    const addBookmarkButton = document.getElementById('addBookmarkButton');
+    const bookmarkContainer = document.getElementById('bookmarkContainer');
+
+    function loadBookmarks() {
+        const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || {};
+        bookmarkContainer.innerHTML = '';
+        Object.keys(bookmarks).forEach(category => {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.innerHTML = `<h3>${category}</h3>`;
+            const bookmarkList = document.createElement('ul');
+            bookmarks[category].forEach(bookmark => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<a href="${bookmark.url}" target="_blank">${bookmark.title}</a>`;
+                bookmarkList.appendChild(listItem);
+            });
+            categoryDiv.appendChild(bookmarkList);
+            bookmarkContainer.appendChild(categoryDiv);
+        });
+    }
+
+    function saveBookmark(title, url, category) {
+        const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || {};
+        if (!bookmarks[category]) {
+            bookmarks[category] = [];
+        }
+        bookmarks[category].push({ title, url });
+        localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    }
+
+    addBookmarkButton.addEventListener('click', () => {
+        const title = bookmarkTitle.value;
+        const url = bookmarkURL.value;
+        const category = bookmarkCategory.value;
+
+        if (title && url) {
+            saveBookmark(title, url, category);
+            bookmarkTitle.value = '';
+            bookmarkURL.value = '';
+            loadBookmarks();
+        } else {
+            alert('Please enter both title and URL.');
+        }
+    });
+
+    loadBookmarks();
+</script>
+
+</body>
+</html>

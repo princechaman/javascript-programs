@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .delete-button{
+                margin-left: 20px;
+            }
+        </style>
+        <title>To-Do List</title>
+    </head>
+<body>
+<h1>To-Do List</h1>
+<label>Task Name :</label>
+<input type="text" id="taskInput" placeholder="Enter Task">
+<button id="addButton">Add</button>
+<ol id="taskList"></ol>
+
+<script>
+    let taskInput = document.getElementById('taskInput'); 
+    let addButton = document.getElementById('addButton');
+    let taskList = document.getElementById('taskList');
+
+    // Load tasks from localStorage
+    function loadTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.forEach(task => {
+            addTaskToDOM(task);
+        });
+    }
+
+    // Save tasks to localStorage
+    function saveTasks() {
+        const tasks = [];
+        document.querySelectorAll('#taskList li').forEach(li => {
+            tasks.push(li.textContent.replace('Delete', '').trim());
+        });
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    // Add task to the DOM
+    function addTaskToDOM(taskValue) {
+        let li = document.createElement('li');
+        let button = document.createElement('button');
+        button.classList.add('delete-button');
+        button.textContent = 'Delete';
+        button.addEventListener('click', function() {
+            li.remove();
+            saveTasks();
+        });
+        li.textContent = taskValue;
+        li.appendChild(button);
+        taskList.appendChild(li);
+    }
+
+    // Add button event listener
+    addButton.addEventListener('click', function() {
+        let taskValue = taskInput.value;
+        if (taskValue !== '') {
+            addTaskToDOM(taskValue);
+            saveTasks();
+            taskInput.value = "";
+        } else {
+            alert("Please enter a task");
+        }
+    });
+
+    // Load tasks when the page loads
+    loadTasks();
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title>Book Search</title>
+</head>
+<body>
+
+<h1>Book Search</h1>
+
+<label for="search">Search for a book: </label>
+<input type="text" id="search" placeholder="Enter book name">
+<button id="searchButton">Search</button>
+
+<div id="book"></div>
+
+<script>
+    const searchInput = document.getElementById('search');
+    const searchButton = document.getElementById('searchButton');
+    const bookResults = document.getElementById('book');
+
+    function searchBooks() {
+        const bookName = searchInput.value;
+        if (bookName !== '') {
+            fetch(`https://www.googleapis.com/books/v1/volumes?q=${bookName}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.items) {
+                        bookResults.innerHTML = '';
+                        data.items.forEach(book => {
+                            const title = book.volumeInfo.title;
+                            const authors = book.volumeInfo.authors ? book.volumeInfo.authors.join(', ') : 'Unknown';
+                            const description = book.volumeInfo.description || 'No description available.';
+                            const image = book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : '';
+
+                            bookResults.innerHTML += `
+                                <div style="margin-bottom: 20px;">
+                                    <h3>${title}</h3>
+                                    <p><strong>Authors:</strong> ${authors}</p>
+                                    <p><strong>Description:</strong> ${description}</p>
+                                    ${image ? `<img src="${image}" alt="${title}" width="100">` : ''}
+                                </div>
+                            `;
+                        });
+                    } else {
+                        bookResults.innerHTML = `<p>No books found. Please try again.</p>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    bookResults.innerHTML = `<p>Error occurred. Please try again later.</p>`;
+                });
+        } else {
+            bookResults.innerHTML = `<p>Please enter a book name.</p>`;
+        }
+    }
+
+    searchButton.addEventListener('click', searchBooks);
+</script>
+
+</body>
+</html>

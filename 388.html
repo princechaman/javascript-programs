@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar App</title>
+</head>
+<body>
+
+<h1>Calendar App</h1>
+
+<label for="date">Select Date:</label>
+<input type="date" id="date"><br><br>
+
+<label for="event">Event:</label>
+<input type="text" id="event" placeholder="Enter event"><br><br>
+
+<button id="addEvent">Add Event</button>
+
+<h2>Scheduled Events</h2>
+<ul id="eventList"></ul>
+
+<script>
+    const dateInput = document.getElementById('date');
+    const eventInput = document.getElementById('event');
+    const addEventButton = document.getElementById('addEvent');
+    const eventList = document.getElementById('eventList');
+
+    function loadEvents() {
+        const events = JSON.parse(localStorage.getItem('events')) || [];
+        eventList.innerHTML = '';
+        events.forEach(event => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${event.date}: ${event.name}`;
+            eventList.appendChild(listItem);
+        });
+    }
+
+    function addEvent() {
+        const date = dateInput.value;
+        const eventName = eventInput.value;
+        if (date && eventName) {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            events.push({ date, name: eventName });
+            localStorage.setItem('events', JSON.stringify(events));
+            loadEvents();
+            dateInput.value = '';
+            eventInput.value = '';
+        } else {
+            alert('Please enter both date and event.');
+        }
+    }
+
+    addEventButton.addEventListener('click', addEvent);
+
+    loadEvents();
+</script>
+
+</body>
+</html>

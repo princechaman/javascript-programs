@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Palette Selector</title>
+    <style>
+        #selected-color{
+            margin-top: 20px;
+            padding: 10px;
+        }  
+        #color-display{
+            width: 100px;
+            height: 100px;
+            margin: auto 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="color-container">
+        <h2>Select a color</h2>
+        <input type="color" id="color-picker">
+        <div id="selected-color">
+            <p>Selected Color:</p>
+            <div id="color-display"></div>
+        </div>
+    </div>
+    <script>
+        
+        const savedColor = localStorage.getItem('selectedColor');
+        if (savedColor) {
+        document.getElementById('color-display').style.backgroundColor = savedColor;
+        document.getElementById('color-picker').value = savedColor;
+    }
+
+    const colorPicker = document.getElementById('color-picker');
+    const colorDisplay = document.getElementById('color-display');
+
+    colorPicker.addEventListener('input', function() {
+        const selectedColor = colorPicker.value;
+        colorDisplay.style.backgroundColor = selectedColor;
+        localStorage.setItem('selectedColor', selectedColor);
+    });
+
+    </script>
+</body>
+</html>

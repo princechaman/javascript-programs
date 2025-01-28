@@ -1,0 +1,20 @@
+<html>
+<body>
+<h1>List Of Items</h1>
+<ul id="myList">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+    <li>Item 4</li>
+</ul>
+
+
+<script>
+    let ulElement = document.getElementById('myList');
+    let list = Array.from(ulElement.children);
+    list.reverse();
+    ulElement.innerHTML = ' ';
+    list.forEach((item)=>{ulElement.appendChild(item)});
+</script>
+</body>
+</html>

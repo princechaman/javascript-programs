@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast</title>
+</head>
+<body>
+
+<h1>Weather Forecast</h1>
+
+<label for="city">Enter City: </label>
+<input type="text" id="city" placeholder="Enter city name">
+<button id="searchButton">Search</button>
+
+<div id="weatherResult"></div>
+
+<script>
+    const cityInput = document.getElementById('city');
+    const searchButton = document.getElementById('searchButton');
+    const weatherResult = document.getElementById('weatherResult');
+    const apiKey = 'your_api_key_here';
+
+    function searchWeather() {
+        const cityName = cityInput.value;
+        if (cityName !== '') {
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cod === 200) {
+                        const temp = data.main.temp;
+                        const humidity = data.main.humidity;
+                        const weather = data.weather[0].description;
+                        const icon = data.weather[0].icon;
+
+                        weatherResult.innerHTML = `
+                            <h3>Weather in ${data.name}, ${data.sys.country}</h3>
+                            <img src="https://openweathermap.org/img/wn/${icon}.png" alt="Weather icon">
+                            <p><strong>Temperature:</strong> ${temp}°C</p>
+                            <p><strong>Humidity:</strong> ${humidity}%</p>
+                            <p><strong>Weather:</strong> ${weather}</p>
+                        `;
+                    } else {
+                        weatherResult.innerHTML = `<p>City not found. Please try again.</p>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    weatherResult.innerHTML = `<p>Error occurred. Please try again later.</p>`;
+                });
+        } else {
+            weatherResult.innerHTML = `<p>Please enter a city name.</p>`;
+        }
+    }
+
+    searchButton.addEventListener('click', searchWeather);
+</script>
+
+</body>
+</html>

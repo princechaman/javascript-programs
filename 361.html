@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Comments</title>
+</head>
+<body>
+
+<h1>Blog Post</h1>
+<p>
+    This is a sample blog post. Below, you can see the comments section where users have shared their thoughts.
+</p>
+
+<h2>Comments</h2>
+<div id="comments-section">
+    <p>Loading comments...</p>
+</div>
+
+<script>
+    function fetchComments() {
+        const xhr = new XMLHttpRequest();
+        const apiURL = 'https://jsonplaceholder.typicode.com/comments?postId=1'; weweaee
+
+        xhr.open('GET', apiURL, true);
+
+        xhr.onload = function() {
+            const commentsSection = document.getElementById('comments-section');
+            if (xhr.status === 200) {
+                const comments = JSON.parse(xhr.responseText);
+                commentsSection.innerHTML = ''; // Clear loading message
+                comments.forEach(comment => {
+                    const commentDiv = document.createElement('div');
+                    commentDiv.style.border = '1px solid #ddd';
+                    commentDiv.style.margin = '10px 0';
+                    commentDiv.style.padding = '10px';
+
+                    commentDiv.innerHTML = `
+                        <h4>${comment.name} (${comment.email})</h4>
+                        <p>${comment.body}</p>
+                    `;
+                    commentsSection.appendChild(commentDiv);
+                });
+            } else {
+                commentsSection.innerHTML = '<p>Failed to load comments. Please try again later.</p>';
+            }
+        };
+
+        xhr.onerror = function() {
+            document.getElementById('comments-section').innerHTML = '<p>There was an error fetching comments.</p>';
+        };
+
+        xhr.send();
+    }
+
+    // Fetch comments when the page loads
+    window.onload = fetchComments;
+</script>
+
+</body>
+</html>

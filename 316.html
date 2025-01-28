@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Login with Remember Me</title>
+  <script>
+    function setCookie(name, value, days) {
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      const expires = "expires=" + date.toUTCString();
+      document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
+    }
+
+    function getCookie(name) {
+      const cookies = document.cookie.split("; ");
+      for (const cookie of cookies) {
+        const [key, value] = cookie.split("=");
+        if (key === name) {
+          return decodeURIComponent(value);
+        }
+      }
+      return null;
+    }
+    function handleLogin(event) {
+      event.preventDefault(); // Prevent form submission
+      const username = document.getElementById("username").value;
+      const rememberMe = document.getElementById("remember-me").checked;
+
+      if (username) {
+        if (rememberMe) {
+          setCookie("username", username, 7); // Save username for 7 days
+        } else {
+          setCookie("username", "", -1); // Clear the cookie
+        }
+        alert("Login successful!");
+      } else {
+        alert("Please enter a username.");
+      }
+    }
+    function prefillUsername() {
+      const savedUsername = getCookie("username");
+      if (savedUsername) {
+        document.getElementById("username").value = savedUsername;
+        document.getElementById("remember-me").checked = true;
+      }
+    }
+    window.onload = prefillUsername;
+  </script>
+</head>
+<body>
+  <h1>Login with Remember Me</h1>
+  <form id="login-form" onsubmit="handleLogin(event)">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <br><br>
+    <label>
+      <input type="checkbox" id="remember-me"> Remember Me
+    </label>
+    <br><br>
+    <button type="submit">Login</button>
+  </form>
+</body>
+</html>

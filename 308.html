@@ -1,0 +1,13 @@
+<html>
+<body>
+    <h1>Open a New Tab</h1>
+    <button id="openTab">Open Google</button>
+
+    <script>
+        document.getElementById('openTab').addEventListener('click', function () {
+            const url = 'https://www.google.com'; 
+            window.open(url, '_blank');
+        });
+    </script>
+</body>
+</html>

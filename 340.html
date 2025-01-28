@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Navigation Tracker</title>
+</head>
+<body>
+
+<h1>Page Navigation Tracker</h1>
+
+<p>List of previously visited pages:</p>
+<ul id="visitedPages"></ul>
+
+<button onclick="navigate('Page 1')">Go to Page 1</button>
+<button onclick="navigate('Page 2')">Go to Page 2</button>
+<button onclick="navigate('Page 3')">Go to Page 3</button>
+
+<script>
+    function loadVisitedPages() {
+        const visitedPages = JSON.parse(sessionStorage.getItem('visitedPages')) || [];
+        const visitedPagesList = document.getElementById('visitedPages');
+        visitedPagesList.innerHTML = ''; 
+        
+        visitedPages.forEach(page => {
+            const listItem = document.createElement('li');
+            listItem.textContent = page;
+            visitedPagesList.appendChild(listItem);
+        });
+    }
+
+    function navigate(pageName) {
+        const visitedPages = JSON.parse(sessionStorage.getItem('visitedPages')) || [];
+        
+        if (!visitedPages.includes(pageName)) {
+            visitedPages.push(pageName);
+        }
+
+        sessionStorage.setItem('visitedPages', JSON.stringify(visitedPages));
+        
+        loadVisitedPages();
+    }
+
+    loadVisitedPages();
+</script>
+
+</body>
+</html>

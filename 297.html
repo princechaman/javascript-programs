@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+</head>
+<body>
+
+<h1>To-Do List</h1>
+<label>Task Name :</label>
+<input type="text" id="taskInput" placeholder="Enter Task">
+<button id="addButton">Add</button>
+<ol id="taskList"></ol>
+
+<script>
+  let taskInput = document.getElementById('taskInput'); 
+  let addButton = document.getElementById('addButton');
+  let taskList = document.getElementById('taskList');
+
+  addButton.addEventListener('click', function() {
+    let taskValue = taskInput.value;
+    if (taskValue !== '') {
+      let li = document.createElement('li');
+      li.textContent = taskValue;
+      
+      let deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.classList.add('delete-button');
+      deleteButton.addEventListener('click', function() {
+        li.remove();
+      });
+
+      let doneButton = document.createElement('button');
+      doneButton.textContent = 'Mark as Done';
+      doneButton.classList.add('done-button');
+      doneButton.addEventListener('click', function() {
+        li.classList.toggle('done');
+        doneButton.textContent = li.classList.contains('done') ? 'Undo' : 'Mark as Done';
+      });
+
+      li.appendChild(doneButton);
+      li.appendChild(deleteButton);
+      taskList.appendChild(li);
+
+      taskInput.value = ""; 
+    } else {
+      alert("Please enter a task");
+    }
+  });
+</script>
+
+<style>
+  .done {
+    text-decoration: line-through;
+    color: gray;
+  }
+  button {
+    margin-left: 10px;
+  }
+</style>
+
+</body>
+</html>
+ 

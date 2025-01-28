@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Dashboard</title>
+</head>
+<body>
+
+<h1>Dynamic Dashboard</h1>
+
+<h2>Tasks (Session Storage)</h2>
+<label for="taskInput">Add Task: </label>
+<input type="text" id="taskInput" placeholder="Enter a task">
+<button id="addTaskButton">Add Task</button>
+<ul id="taskList"></ul>
+
+<h2>Notes (Local Storage)</h2>
+<label for="noteInput">Add Note: </label>
+<input type="text" id="noteInput" placeholder="Enter a note">
+<button id="addNoteButton">Add Note</button>
+<ul id="noteList"></ul>
+
+<script>
+    // Task section - Session Storage
+    const taskInput = document.getElementById('taskInput');
+    const addTaskButton = document.getElementById('addTaskButton');
+    const taskList = document.getElementById('taskList');
+
+    function loadTasks() {
+        const tasks = JSON.parse(sessionStorage.getItem('tasks')) || [];
+        tasks.forEach(task => {
+            addTaskToDOM(task);
+        });
+    }
+
+    function saveTasks() {
+        const tasks = [];
+        document.querySelectorAll('#taskList li').forEach(li => {
+            tasks.push(li.textContent.trim());
+        });
+        sessionStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function addTaskToDOM(taskValue) {
+        let li = document.createElement('li');
+        li.textContent = taskValue;
+        taskList.appendChild(li);
+    }
+
+    addTaskButton.addEventListener('click', () => {
+        let taskValue = taskInput.value;
+        if (taskValue !== '') {
+            addTaskToDOM(taskValue);
+            saveTasks();
+            taskInput.value = '';
+        } else {
+            alert("Please enter a task");
+        }
+    });
+
+    loadTasks();
+
+    // Note section - Local Storage
+    const noteInput = document.getElementById('noteInput');
+    const addNoteButton = document.getElementById('addNoteButton');
+    const noteList = document.getElementById('noteList');
+
+    function loadNotes() {
+        const notes = JSON.parse(localStorage.getItem('notes')) || [];
+        notes.forEach(note => {
+            addNoteToDOM(note);
+        });
+    }
+
+    function saveNotes() {
+        const notes = [];
+        document.querySelectorAll('#noteList li').forEach(li => {
+            notes.push(li.textContent.trim());
+        });
+        localStorage.setItem('notes', JSON.stringify(notes));
+    }
+
+    function addNoteToDOM(noteValue) {
+        let li = document.createElement('li');
+        li.textContent = noteValue;
+        noteList.appendChild(li);
+    }
+
+    addNoteButton.addEventListener('click', () => {
+        let noteValue = noteInput.value;
+        if (noteValue !== '') {
+            addNoteToDOM(noteValue);
+            saveNotes();
+            noteInput.value = '';
+        } else {
+            alert("Please enter a note");
+        }
+    });
+
+    loadNotes();
+</script>
+
+</body>
+</html>

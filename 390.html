@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey App</title>
+</head>
+<body>
+
+<h1>Survey App</h1>
+
+<div id="surveyContainer"></div><br>
+
+
+<button id="submitSurvey">Submit Survey</button>
+<p id="status"></p>
+
+<script>
+    const surveyContainer = document.getElementById('surveyContainer');
+    const submitSurvey = document.getElementById('submitSurvey');
+    const status = document.getElementById('status');
+
+    function fetchSurveyQuestions() {
+        fetch('https://jsonplaceholder.typicode.com/posts?_limit=5')
+            .then(response => response.json())
+            .then(questions => {
+                questions.forEach((question, index) => {
+                    const questionElement = document.createElement('div');
+                    questionElement.innerHTML = `
+                        <p>${index + 1}. ${question.title}</p>
+                        <input type="text" data-id="${question.id}" placeholder="Your answer">
+                    `;
+                    surveyContainer.appendChild(questionElement);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching survey questions:', error);
+                surveyContainer.innerHTML = '<p>Failed to load survey questions.</p>';
+            });
+    }
+
+    function saveResponses() {
+        const responses = [];
+        surveyContainer.querySelectorAll('input').forEach(input => {
+            responses.push({
+                questionId: input.getAttribute('data-id'),
+                answer: input.value
+            });
+        });
+        localStorage.setItem('surveyResponses', JSON.stringify(responses));
+        status.textContent = 'Survey responses saved!';
+    }
+
+    submitSurvey.addEventListener('click', saveResponses);
+
+    fetchSurveyQuestions();
+</script>
+
+</body>
+</html>

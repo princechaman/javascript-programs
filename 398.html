@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcast Player</title>
+</head>
+<body>
+
+<h1>Podcast Player</h1>
+
+<label for="search">Search for podcasts: </label>
+<input type="text" id="search" placeholder="Enter podcast name">
+<button onclick="searchPodcast()">Search</button>
+
+<h2>Podcast List</h2>
+<ul id="podcastList"></ul>
+
+<h2>Now Playing</h2>
+<p id="nowPlaying"></p>
+<audio id="audioPlayer" controls></audio>
+
+<script>
+    const apiUrl = 'https://api.podcastindex.org/api/1.0/search/byterm'; 
+    const apiKey = '66bffb1a-bdff-4222-a02a-c59fd6d2bb04'; 
+
+    function searchPodcast() {
+        const query = document.getElementById('search').value;
+        if (query) {
+            fetch(`${apiUrl}?q=${query}`, {
+                method: 'GET',
+                headers: {
+                    'X-API-KEY': apiKey,
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const podcasts = data.podcasts;
+                displayPodcasts(podcasts);
+            })
+            .catch(error => {
+                console.error('Error fetching podcasts:', error);
+            });
+        }
+    }
+
+    function displayPodcasts(podcasts) {
+        const podcastList = document.getElementById('podcastList');
+        podcastList.innerHTML = ''; 
+
+        podcasts.forEach(podcast => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <strong>${podcast.title}</strong><br>
+                <small>${podcast.publisher}</small><br>
+                <button onclick="playEpisode('${podcast.feedUrl}')">Play Latest Episode</button>
+            `;
+            podcastList.appendChild(li);
+        });
+    }
+
+    function playEpisode(feedUrl) {
+        fetch(feedUrl)
+        .then(response => response.text())
+        .then(data => {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(data, 'text/xml');
+            const latestEpisodeUrl = xmlDoc.querySelector('item > enclosure').getAttribute('url');
+            const episodeTitle = xmlDoc.querySelector('item > title').textContent;
+
+            document.getElementById('nowPlaying').textContent = `Now playing: ${episodeTitle}`;
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.src = latestEpisodeUrl;
+            audioPlayer.play();
+        })
+        .catch(error => {
+            console.error('Error playing episode:', error);
+        });
+    }
+</script>
+
+</body>
+</html>

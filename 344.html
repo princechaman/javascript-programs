@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <title>Theme Selector</title>
+    <style>
+        body.light {
+            background-color: white;
+            color: black;
+        }
+    
+        body.dark {
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Page Theme Selector</h1>
+
+<p>Select a theme for this page:</p>
+<select id="themeSelector">
+    <option value="light">Light Theme</option>
+    <option value="dark">Dark Theme</option>
+</select>
+
+<script>
+    function loadTheme() {
+        const theme = sessionStorage.getItem('theme') || 'light';
+        document.body.className = theme;
+        document.getElementById('themeSelector').value = theme;
+    }
+
+    document.getElementById('themeSelector').addEventListener('change', function() {
+        const selectedTheme = this.value;
+        sessionStorage.setItem('theme', selectedTheme);
+        document.body.className = selectedTheme;
+    });
+
+    loadTheme();
+</script>
+</body>
+</html>

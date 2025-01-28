@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Mode with Local Storage</title>
+</head>
+<body>
+
+<h1>Offline Mode App</h1>
+
+<form id="dataForm">
+    <label for="userData">Enter Data:</label>
+    <input type="text" id="userData" placeholder="Enter some data">
+    <button type="submit">Save Data</button>
+</form>
+
+<h2>Saved Data:</h2>
+<ul id="dataList"></ul>
+
+<script>
+    const dataForm = document.getElementById('dataForm');
+    const userDataInput = document.getElementById('userData');
+    const dataList = document.getElementById('dataList');
+
+    function loadSavedData() {
+        const savedData = JSON.parse(localStorage.getItem('offlineData')) || [];
+        savedData.forEach(data => {
+            const li = document.createElement('li');
+            li.textContent = data;
+            dataList.appendChild(li);
+        });
+    }
+
+    function saveDataToLocalStorage(data) {
+        let savedData = JSON.parse(localStorage.getItem('offlineData')) || [];
+        savedData.push(data);
+        localStorage.setItem('offlineData', JSON.stringify(savedData));
+    }
+
+    function syncData() {
+        const savedData = JSON.parse(localStorage.getItem('offlineData')) || [];
+        if (savedData.length > 0) {
+            console.log('Syncing data to server:', savedData);
+            localStorage.removeItem('offlineData');
+        }
+    }
+
+    dataForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const userData = userDataInput.value.trim();
+        if (userData) {
+            saveDataToLocalStorage(userData);
+            const li = document.createElement('li');
+            li.textContent = userData;
+            dataList.appendChild(li);
+            userDataInput.value = '';
+        }
+    });
+
+    window.addEventListener('online', () => {
+        alert('You are online!');
+        syncData();
+    });
+
+    window.addEventListener('offline', () => {
+        alert('You are offline. Data will be saved locally.');
+    });
+
+    loadSavedData();
+</script>
+
+</body>
+</html>
+

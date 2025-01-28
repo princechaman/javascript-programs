@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Search</title>
+</head>
+<body>
+
+<h1>Real-time Search for Users</h1>
+<input type="text" id="searchBox" placeholder="Search for a user..." />
+<ul id="userList"></ul>
+
+<script>
+    const searchBox = document.getElementById('searchBox');
+    const userList = document.getElementById('userList');
+
+    function fetchUsers(query = '') {
+        const xhr = new XMLHttpRequest();
+        const url = `https://jsonplaceholder.typicode.com/users`;
+
+        xhr.open('GET', url, true);
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const users = JSON.parse(xhr.responseText);
+                const filteredUsers = users.filter(user => user.name.toLowerCase().includes(query.toLowerCase()));
+                displayUsers(filteredUsers);
+            } else {
+                console.error('Error fetching users:', xhr.statusText);
+            }
+        };
+
+        xhr.onerror = function() {
+            console.error('Request failed');
+        };
+
+        xhr.send();
+    }
+
+    function displayUsers(users) {
+        userList.innerHTML = ''; 
+        users.forEach(user => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${user.name} - ${user.email}`;
+            userList.appendChild(listItem);
+        });
+    }
+
+    searchBox.addEventListener('input', function() {
+        const query = searchBox.value.trim();
+        fetchUsers(query);
+    });
+
+    window.onload = function() {
+        fetchUsers();
+    };
+</script>
+
+</body>
+</html>

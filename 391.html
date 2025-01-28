@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Center</title>
+</head>
+<body>
+
+<h1>Notification Center</h1>
+
+<button id="notifyButton">Send Notification</button>
+<p id="status"></p>
+
+<script>
+    const notifyButton = document.getElementById('notifyButton');
+    const status = document.getElementById('status');
+
+    function askNotificationPermission() {
+        if (!("Notification" in window)) {
+            status.textContent = "This browser does not support notifications.";
+            notifyButton.disabled = true;
+        } else if (Notification.permission === "granted") {
+            status.textContent = "Notifications are enabled.";
+        } else if (Notification.permission === "denied") {
+            status.textContent = "Notifications are disabled.";
+            notifyButton.disabled = true;
+        } else {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    status.textContent = "Notifications are enabled.";
+                } else {
+                    status.textContent = "Notifications are disabled.";
+                    notifyButton.disabled = true;
+                }
+            });
+        }
+    }
+
+    function sendNotification() {
+        if (Notification.permission === "granted") {
+            new Notification("Hello from Notification Center!", {
+                body: "This is a test notification.",
+                icon: "https://via.placeholder.com/150"
+            });
+        }
+    }
+
+    notifyButton.addEventListener('click', sendNotification);
+
+    askNotificationPermission();
+</script>
+
+</body>
+</html>

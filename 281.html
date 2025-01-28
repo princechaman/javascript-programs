@@ -1,0 +1,17 @@
+<html>
+<body>
+<h1 id="h1">This is a Heading</h1>
+<input type="text" id="inputField" placeholder="Type Something...">
+<script>
+    let input = document.getElementById('inputField');
+    let h1 = document.getElementById('h1');
+  
+    
+    input.addEventListener('change',()=>{
+       h1.innerHTML = input.value;
+       input.value = '';
+    });
+    
+</script>
+</body>
+</html>

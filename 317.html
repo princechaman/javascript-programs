@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Policy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #cookiePopup {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+        }
+        #cookiePopup button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #cookiePopup button.accept {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #cookiePopup button.decline {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cookiePopup">
+        <p>We use cookies to improve your experience. By using our site, you agree to our <a href="#">Cookie Policy</a>.</p>
+        <button class="accept" onclick="acceptCookies()">Accept</button>
+        <button class="decline" onclick="declineCookies()">Decline</button>
+    </div>
+
+    <script>
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        window.onload = function() {
+            if (!getCookie("cookieConsent")) {
+                document.getElementById("cookiePopup").style.display = "block";
+            }
+        };
+
+        function acceptCookies() {
+            document.cookie = "cookieConsent=true; max-age=" + 60 * 60 * 24 * 365 + "; path=/";  // Cookie expires in 1 year
+            document.getElementById("cookiePopup").style.display = "none";
+        }
+
+
+        function declineCookies() {
+            document.cookie = "cookieConsent=false; max-age=" + 60 * 60 * 24 * 365 + "; path=/";  // Cookie expires in 1 year
+            document.getElementById("cookiePopup").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>

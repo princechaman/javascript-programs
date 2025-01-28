@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+
+<h1>User Profile</h1>
+
+<div>
+    <label for="name">Name: </label>
+    <span id="userName"></span>
+</div>
+<div>
+    <label for="email">Email: </label>
+    <span id="userEmail"></span>
+</div>
+<div>
+    <label for="age">Age: </label>
+    <span id="userAge"></span>
+</div>
+
+<h3>Update Profile</h3>
+
+<form id="profileForm">
+    <div>
+        <label for="nameInput">Name: </label>
+        <input type="text" id="nameInput">
+    </div>
+    <div>
+        <label for="emailInput">Email: </label>
+        <input type="email" id="emailInput">
+    </div>
+    <div>
+        <label for="ageInput">Age: </label>
+        <input type="number" id="ageInput">
+    </div>
+    <button type="submit">Save Profile</button>
+</form>
+
+<script>
+    function loadProfile() {
+        const profile = JSON.parse(sessionStorage.getItem('profile')) || {};
+        document.getElementById('userName').textContent = profile.name || 'N/A';
+        document.getElementById('userEmail').textContent = profile.email || 'N/A';
+        document.getElementById('userAge').textContent = profile.age || 'N/A';
+    }
+
+    document.getElementById('profileForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const name = document.getElementById('nameInput').value;
+        const email = document.getElementById('emailInput').value;
+        const age = document.getElementById('ageInput').value;
+
+        const profile = { name, email, age };
+        sessionStorage.setItem('profile', JSON.stringify(profile));
+
+        loadProfile();
+    });
+
+    loadProfile();
+</script>
+
+</body>
+</html>

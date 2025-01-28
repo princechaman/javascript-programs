@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Lazy Loading Product List</title>
+    <style>
+        .productDiv{
+            border : '1px solid #ddd';
+            margin : '10px 0';
+            padding : '10px';
+        }
+    </style>
+</head>
+<body>
+    <h1>Product List</h1>
+    <div id="product-list"></div>
+    <div id="loading" style="text-align: center; padding: 20px; display: none;">Loading...</div>
+
+    <script>
+        const productList = document.getElementById('product-list');
+        const loading = document.getElementById('loading');
+        let page = 1; 
+        let isLoading = false;
+
+        function loadProducts() {
+            if (isLoading) return; 
+            isLoading = true;
+            loading.style.display = 'block'; 
+
+            fetch(`https://fakestoreapi.com/products?limit=10&page=${page}`)
+                .then(response => response.json())
+                .then(products => {
+                    products.forEach(product => {
+                        const productElement = document.createElement('div');
+                        productElement.classList.add('productDiv')
+                        productElement.innerHTML = `
+                            <h3>${product.title}</h3>
+                            <p>${product.description}</p>
+                            <p><strong>$${product.price}</strong></p>
+                            <img src="${product.image}" heigth="100px" width="100px">
+                        `;
+                        productList.appendChild(productElement);
+                    });
+
+                    page++; 
+                    isLoading = false;
+                    loading.style.display = 'none'; 
+                })
+                .catch(error => {
+                    console.error('Error loading products:', error);
+                    isLoading = false;
+                    loading.style.display = 'none';
+                });
+        }
+
+        window.addEventListener('scroll', () => {
+            if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
+                loadProducts
+            }
+        });
+
+        loadProducts();
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Session Tracker</title>
+</head>
+<body>
+
+<h1>Game Session</h1>
+
+<p>Score: <span id="score">0</span></p>
+<p>Level: <span id="level">1</span></p>
+
+<button onclick="increaseScore()">Increase Score</button>
+<button onclick="increaseLevel()">Next Level</button>
+<button onclick="resetGame()">Reset Game</button>
+
+<script>
+    function loadGameSession() {
+        const gameSession = JSON.parse(sessionStorage.getItem('gameSession')) || { score: 0, level: 1 };
+        document.getElementById('score').textContent = gameSession.score;
+        document.getElementById('level').textContent = gameSession.level;
+    }
+
+    function saveGameSession(score, level) {
+        const gameSession = { score, level };
+        sessionStorage.setItem('gameSession', JSON.stringify(gameSession));
+    }
+
+    function increaseScore() {
+        const currentScore = parseInt(document.getElementById('score').textContent);
+        const currentLevel = parseInt(document.getElementById('level').textContent);
+        const newScore = currentScore + 10;
+        saveGameSession(newScore, currentLevel);
+        loadGameSession();
+    }
+
+    function increaseLevel() {
+        const currentScore = parseInt(document.getElementById('score').textContent);
+        const currentLevel = parseInt(document.getElementById('level').textContent);
+        const newLevel = currentLevel + 1;
+        saveGameSession(currentScore, newLevel);
+        loadGameSession();
+    }
+
+    function resetGame() {
+        sessionStorage.removeItem('gameSession');
+        loadGameSession();
+    }
+
+    loadGameSession();
+</script>
+
+</body>
+</html>

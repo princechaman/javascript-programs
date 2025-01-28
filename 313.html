@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pop-up Blocker Checker</title>
+</head>
+<body>
+    <h1>Pop-up Blocker Checker</h1>
+    <button onclick="checkPopup()">Check Pop-up</button>
+    <p id="result"></p>
+
+    <script>
+        function checkPopup() {
+            var popup = window.open('', '', 'width=100,height=100');
+            if (!popup) {
+                document.getElementById('result').textContent = 'Pop-up Blocker is enabled.';
+            } else {
+                popup.close();
+                document.getElementById('result').textContent = 'No Pop-up Blocker detected.';
+            }
+        }
+    </script>
+</body>
+</html>

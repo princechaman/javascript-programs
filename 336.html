@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Shopping Cart</title>
+</head>
+<body>
+
+<h1>Shopping Cart</h1>
+
+<button onclick="addToCart('Apple', 2)">Add Apple - $2</button>
+<button onclick="addToCart('Banana', 1)">Add Banana - $1</button>
+<button onclick="addToCart('Orange', 3)">Add Orange - $3</button>
+
+<h2>Your Cart</h2>
+<ul id="cartItems"></ul>
+<p>Total: $<span id="totalAmount">0</span></p>
+<button onclick="clearCart()">Clear Cart</button>
+
+<script>
+    function loadCart() {
+        const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+        let totalAmount = 0;
+        const cartItemsList = document.getElementById('cartItems');
+        cartItemsList.innerHTML = '';
+
+        cart.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${item.name} - $${item.price} x ${item.quantity}`;
+            cartItemsList.appendChild(listItem);
+            totalAmount += item.price * item.quantity;
+        });
+
+        document.getElementById('totalAmount').textContent = totalAmount;
+    }
+
+    function addToCart(name, price) {
+        let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+        const existingItem = cart.find(item => item.name === name);
+
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.push({ name, price, quantity: 1 });
+        }
+
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+        loadCart();
+    }
+
+    function clearCart() {
+        sessionStorage.removeItem('cart');
+        loadCart();
+    }
+
+    loadCart();
+</script>
+
+</body>
+</html>

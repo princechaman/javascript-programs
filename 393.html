@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Greeting App</title>
+</head>
+<body>
+
+<h1>Welcome to the Personalized Greeting App</h1>
+
+<div id="setupForm">
+    <h2>Set Your Preferences</h2>
+    <label for="userName">Your Name:</label>
+    <input type="text" id="userName" placeholder="Enter your name">
+    <br><br>
+
+    <label for="favoriteColor">Favorite Color:</label>
+    <input type="color" id="favoriteColor">
+    <br><br>
+
+    <label for="greeting">Preferred Greeting:</label>
+    <select id="greeting">
+        <option value="Hello">Hello</option>
+        <option value="Hi">Hi</option>
+        <option value="Welcome">Welcome</option>
+        <option value="Good Day">Good Day</option>
+    </select>
+    <br><br>
+
+    <button id="savePreferences">Save Preferences</button>
+</div>
+
+<div id="greetingDisplay" style="display: none;">
+    <h2 id="personalizedGreeting"></h2>
+    <button id="resetPreferences">Reset Preferences</button>
+</div>
+
+<script>
+    const setupForm = document.getElementById('setupForm');
+    const greetingDisplay = document.getElementById('greetingDisplay');
+    const userNameInput = document.getElementById('userName');
+    const favoriteColorInput = document.getElementById('favoriteColor');
+    const greetingSelect = document.getElementById('greeting');
+    const savePreferencesButton = document.getElementById('savePreferences');
+    const personalizedGreeting = document.getElementById('personalizedGreeting');
+    const resetPreferencesButton = document.getElementById('resetPreferences');
+
+    const localStorageKey = "userPreferences";
+
+    function loadPreferences() {
+        const preferences = JSON.parse(localStorage.getItem(localStorageKey));
+        if (preferences) {
+            const { name, color, greeting } = preferences;
+
+            personalizedGreeting.textContent = `${greeting}, ${name}!`;
+            greetingDisplay.style.backgroundColor = color;
+            setupForm.style.display = "none";
+            greetingDisplay.style.display = "block";
+        }
+    }
+
+    function savePreferences() {
+        const name = userNameInput.value;
+        const color = favoriteColorInput.value;
+        const greeting = greetingSelect.value;
+
+        if (name) {
+            const preferences = { name, color, greeting };
+            localStorage.setItem(localStorageKey, JSON.stringify(preferences));
+            loadPreferences();
+        } else {
+            alert("Please enter your name.");
+        }
+    }
+
+    function resetPreferences() {
+        localStorage.removeItem(localStorageKey);
+        setupForm.style.display = "block";
+        greetingDisplay.style.display = "none";
+    }
+
+    savePreferencesButton.addEventListener("click", savePreferences);
+    resetPreferencesButton.addEventListener("click", resetPreferences);
+
+    loadPreferences();
+</script>
+
+</body>
+</html>

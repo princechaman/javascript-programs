@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loader Animation Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Data Fetch with Loader</h1>
+<button id="fetchData">Fetch Data</button>
+<div class="loader" id="loader"></div>
+<div id="result"></div>
+
+<script>
+    document.getElementById('fetchData').addEventListener('click', function () {
+        const loader = document.getElementById('loader');
+        const result = document.getElementById('result');
+
+        loader.style.display = 'block';
+        result.textContent = '';
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://jsonplaceholder.typicode.com/posts/1', true);
+
+        xhr.onload = function () {
+            loader.style.display = 'none'; 
+            if (xhr.status === 200) {
+                const data = JSON.parse(xhr.responseText);
+                result.textContent = `Title: ${data.title}`;
+            } else {
+                result.textContent = 'Failed to fetch data.';
+            }
+        };
+
+        xhr.onerror = function () {
+            loader.style.display = 'none';
+            result.textContent = 'Network error. Please try again.';
+        };
+
+        xhr.send();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repository Search</title>
+</head>
+<body>
+    <h1>GitHub Repository Search</h1>
+    <input type="text" id="search-bar" placeholder="Search GitHub repositories..." />
+    <button id="search-button">Search</button>
+    <div id="repo-list"></div>
+
+    <script>
+        document.getElementById('search-button').addEventListener('click', function() {
+            const query = document.getElementById('search-bar').value;
+            const repoList = document.getElementById('repo-list');
+            repoList.innerHTML = 'Loading repositories...';
+
+            if (query) {
+                fetch(`https://api.github.com/search/repositories?q=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        repoList.innerHTML = '';
+                        if (data.items.length > 0) {
+                            data.items.forEach(repo => {
+                                const repoDiv = document.createElement('div');
+                                
+                                const title = document.createElement('h3');
+                                const link = document.createElement('a');
+                                link.href = repo.html_url;
+                                link.target = '_blank';
+                                link.textContent = repo.name;
+                                title.appendChild(link);
+
+                                const description = document.createElement('p');
+                                description.textContent = repo.description || 'No description available';
+
+                                repoDiv.appendChild(title);
+                                repoDiv.appendChild(description);
+                                repoList.appendChild(repoDiv);
+                            });
+                        } else {
+                            repoList.innerHTML = 'No repositories found.';
+                        }
+                    })
+                    .catch(() => {
+                        repoList.innerHTML = 'Failed to fetch repositories.';
+                    });
+            } else {
+                repoList.innerHTML = 'Please enter a search query.';
+            }
+        });
+    </script>
+</body>
+

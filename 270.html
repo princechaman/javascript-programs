@@ -1,0 +1,28 @@
+<html>
+<head>
+  <title>Simple Calculator</title>
+  <style>
+      body{
+          text-align: center;
+      }
+  </style>
+</head>
+<body>
+  <h2>Display Current Date and Time</h2>
+  <button id="showDateTimeButton">Show Date and Time</button>
+  <p id="display"></p>
+
+  <script>
+    let button = document.getElementById('showDateTimeButton');
+    let display = document.getElementById('display');
+
+    button.addEventListener('click', () => {
+     
+      const now = new Date();
+      const dateTimeString = now.toLocaleString();
+
+      display.textContent = `Current Date and Time: ${dateTimeString}`;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Data Table</title>
+    <style>
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<h1 style="text-align: center;">API Data Table</h1>
+<button id="fetchData">Fetch Data</button>
+<table id="dataTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Body</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be dynamically inserted here -->
+    </tbody>
+</table>
+
+<script>
+    document.getElementById('fetchData').addEventListener('click', function () {
+        const tableBody = document.querySelector('#dataTable tbody');
+        tableBody.innerHTML = ''; // Clear previous data
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://jsonplaceholder.typicode.com/posts', true);
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const data = JSON.parse(xhr.responseText);
+
+                data.slice(0, 10).forEach(post => {
+                    const row = document.createElement('tr');
+
+                    const idCell = document.createElement('td');
+                    idCell.textContent = post.id;
+
+                    const titleCell = document.createElement('td');
+                    titleCell.textContent = post.title;
+
+                    const bodyCell = document.createElement('td');
+                    bodyCell.textContent = post.body;
+
+                    row.appendChild(idCell);
+                    row.appendChild(titleCell);
+                    row.appendChild(bodyCell);
+                    tableBody.appendChild(row);
+                });
+            } else {
+                alert('Failed to fetch data. Please try again.');
+            }
+        };
+
+        xhr.onerror = function () {
+            alert('Network error. Please check your connection.');
+        };
+
+        xhr.send();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .delete-button {
+            margin-left: 20px;
+        }
+        h1 {
+            font-family: Arial, sans-serif;
+        }
+        input, button {
+            padding: 8px;
+            margin: 5px;
+        }
+        #bookList {
+            list-style-type: none;
+            padding: 0;
+        }
+    </style>
+    <title>Book Tracker</title>
+</head>
+<body>
+
+<h1>Book Tracker</h1>
+<label for="bookInput">Enter Book Title:</label>
+<input type="text" id="bookInput" placeholder="Enter Book Title">
+<button id="addButton">Add Book</button>
+
+<h3>Your Books:</h3>
+<ol id="bookList"></ol>
+
+<script>
+    let bookInput = document.getElementById('bookInput'); 
+    let addButton = document.getElementById('addButton');
+    let bookList = document.getElementById('bookList');
+
+    function loadBooks() {
+        const books = JSON.parse(localStorage.getItem('books')) || [];
+        books.forEach(book => {
+            addBookToDOM(book);
+        });
+    }
+
+    function saveBooks() {
+        const books = [];
+        document.querySelectorAll('#bookList li').forEach(li => {
+            books.push(li.textContent.replace('Remove', '').trim());
+        });
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+
+    function addBookToDOM(bookTitle) {
+        let li = document.createElement('li');
+        let button = document.createElement('button');
+        button.classList.add('delete-button');
+        button.textContent = 'Remove';
+        button.addEventListener('click', function() {
+            li.remove();
+            saveBooks();
+        });
+        li.textContent = bookTitle;
+        li.appendChild(button);
+        bookList.appendChild(li);
+    }
+
+    addButton.addEventListener('click', function() {
+        let bookTitle = bookInput.value;
+        if (bookTitle !== '') {
+            addBookToDOM(bookTitle);
+            saveBooks();
+            bookInput.value = ""; 
+        } else {
+            alert("Please enter a book title");
+        }
+    });
+
+    loadBooks();
+</script>
+
+</body>
+</html>

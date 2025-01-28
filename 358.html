@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Data Viewer</title>
+    <style>
+        .json-container {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .key {
+            font-weight: bold;
+        }
+        .value {
+            color: #555;
+        }
+        .expand-collapse {
+            cursor: pointer;
+            color: #007bff;
+        }
+        .nested {
+            margin-left: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>JSON Data Viewer</h1>
+<div id="jsonViewer" class="json-container"></div>
+
+<script>
+    const jsonData = {
+        "name": "John Doe",
+        "age": 30,
+        "address": {
+            "street": "123 Main St",
+            "city": "New York",
+            "postalCode": "10001"
+        },
+        "phoneNumbers": [
+            { "type": "home", "number": "123-456-7890" },
+            { "type": "work", "number": "987-654-3210" }
+        ],
+        "email": "john.doe@example.com"
+    };
+
+    function createJsonViewer(data, container) {
+        if (typeof data === 'object' && !Array.isArray(data)) {
+            for (const key in data) {
+                const div = document.createElement('div');
+                const keySpan = document.createElement('span');
+                keySpan.classList.add('key');
+                keySpan.textContent = key + ': ';
+                div.appendChild(keySpan);
+
+                const value = data[key];
+                if (typeof value === 'object') {
+                    const expandCollapseSpan = document.createElement('span');
+                    expandCollapseSpan.textContent = '▼';
+                    expandCollapseSpan.classList.add('expand-collapse');
+                    div.appendChild(expandCollapseSpan);
+
+                    const nestedDiv = document.createElement('div');
+                    nestedDiv.classList.add('nested');
+                    createJsonViewer(value, nestedDiv);
+                    div.appendChild(nestedDiv);
+
+                    expandCollapseSpan.addEventListener('click', function () {
+                        const isVisible = nestedDiv.style.display === 'block';
+                        nestedDiv.style.display = isVisible ? 'none' : 'block';
+                        expandCollapseSpan.textContent = isVisible ? '▼' : '▲';
+                    });
+                } else {
+                    const valueSpan = document.createElement('span');
+                    valueSpan.classList.add('value');
+                    valueSpan.textContent = value;
+                    div.appendChild(valueSpan);
+                }
+
+                container.appendChild(div);
+            }
+        } else if (Array.isArray(data)) {
+            data.forEach(item => createJsonViewer(item, container));
+        }
+    }
+
+    window.onload = function () {
+        const container = document.getElementById('jsonViewer');
+        createJsonViewer(jsonData, container);
+    };
+</script>
+
+</body>
+</html>

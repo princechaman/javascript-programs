@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<h1>QR Code Generator</h1>
+<label for="qrText">Enter text to generate QR Code:</label>
+<input type="text" id="qrText" placeholder="Enter text">
+<button id="generateButton">Generate</button>
+
+<h2>Generated QR Code</h2>
+<div id="qrCode"></div>
+
+<h2>Saved QR Codes</h2>
+<div id="savedCodes"></div>
+
+<script>
+    const qrText = document.getElementById('qrText');
+    const generateButton = document.getElementById('generateButton');
+    const qrCodeContainer = document.getElementById('qrCode');
+    const savedCodesContainer = document.getElementById('savedCodes');
+
+    function loadSavedCodes() {
+        const savedCodes = JSON.parse(localStorage.getItem('qrCodes')) || [];
+        savedCodesContainer.innerHTML = '';
+        savedCodes.forEach(code => {
+            const img = document.createElement('img');
+            img.src = code;
+            savedCodesContainer.appendChild(img);
+        });
+    }
+
+    function saveQRCode(dataUrl) {
+        const savedCodes = JSON.parse(localStorage.getItem('qrCodes')) || [];
+        savedCodes.push(dataUrl);
+        localStorage.setItem('qrCodes', JSON.stringify(savedCodes));
+    }
+
+    generateButton.addEventListener('click', () => {
+        const text = qrText.value;
+        if (text) {
+            qrCodeContainer.innerHTML = '';
+            const qrCode = new QRCode(qrCodeContainer, { text: text, width: 128, height: 128 });
+            setTimeout(() => {
+                const qrImage = qrCodeContainer.querySelector('img').src;
+                saveQRCode(qrImage);
+                loadSavedCodes();
+            }, 500);
+        }
+    });
+
+    loadSavedCodes();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+</head>
+<body>
+  <button id="openModalButton">Open Modal</button>
+
+  <!-- Modal structure -->
+  <div id="modal" class="modal-overlay">
+    <div class="modal-content">
+      <h2>Popup Modal</h2>
+      <p>This is a modal popup!</p>
+      <button id="closeModalButton" class="close-button">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById("modal");
+    const openModalButton = document.getElementById("openModalButton");
+    const closeModalButton = document.getElementById("closeModalButton");
+    openModalButton.addEventListener("click", function () {
+      modal.style.display = "flex"; 
+    });
+    closeModalButton.addEventListener("click", function () {
+      modal.style.display = "none"; 
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Leaderboard</title>
+</head>
+<body>
+
+<h1>Game Leaderboard</h1>
+
+<div>
+    <h2>Enter Your Score</h2>
+    <label for="playerName">Your Name:</label>
+    <input type="text" id="playerName" placeholder="Enter your name">
+    <br><br>
+
+    <label for="playerScore">Your Score:</label>
+    <input type="number" id="playerScore" placeholder="Enter your score">
+    <br><br>
+
+    <button id="submitScore">Submit Score</button>
+</div>
+
+<h2>Leaderboard</h2>
+<ol id="leaderboard"></ol>
+
+<script>
+    const playerNameInput = document.getElementById('playerName');
+    const playerScoreInput = document.getElementById('playerScore');
+    const submitScoreButton = document.getElementById('submitScore');
+    const leaderboard = document.getElementById('leaderboard');
+
+    const leaderboardKey = "gameLeaderboard";
+
+    function loadLeaderboard() {
+        const leaderboardData = JSON.parse(localStorage.getItem(leaderboardKey)) || [];
+        leaderboard.innerHTML = '';
+        leaderboardData.sort((a, b) => b.score - a.score); 
+        leaderboardData.forEach(player => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${player.name} - ${player.score}`;
+            leaderboard.appendChild(listItem);
+        });
+    }
+
+    function saveScore() {
+        const playerName = playerNameInput.value;
+        const playerScore = parseInt(playerScoreInput.value);
+
+        if (playerName && playerScore) {
+            const leaderboardData = JSON.parse(localStorage.getItem(leaderboardKey)) || [];
+            leaderboardData.push({ name: playerName, score: playerScore });
+            localStorage.setItem(leaderboardKey, JSON.stringify(leaderboardData));
+            loadLeaderboard();
+            playerNameInput.value = '';
+            playerScoreInput.value = '';
+        } else {
+            alert("Please enter both name and score.");
+        }
+    }
+
+    submitScoreButton.addEventListener('click', saveScore);
+
+    loadLeaderboard();
+</script>
+
+</body>
+</html>

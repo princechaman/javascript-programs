@@ -1,0 +1,21 @@
+<html>
+<body>
+
+  <label>
+    <input type="checkbox" id="toggleCheckbox">
+    Enable Input
+  </label>
+  <br><br>
+  <input type="text" id="textInput" placeholder="Enter text here" disabled>
+
+  <script>
+    const checkbox = document.getElementById('toggleCheckbox');
+    const textInput = document.getElementById('textInput');
+
+    checkbox.addEventListener('change', () => {
+      textInput.disabled = !checkbox.checked;
+    });
+  </script>
+
+</body>
+</html>

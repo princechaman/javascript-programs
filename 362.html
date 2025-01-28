@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+</head>
+<body>
+
+<h1>Weather App</h1>
+<label for="city">Enter City Name:</label>
+<input type="text" id="city" placeholder="e.g., London">
+<button id="getWeather">Get Weather</button>
+
+<div id="weatherResult">
+    <h2>Weather Information</h2>
+    <p id="weatherInfo">No data available. Please enter a city and click "Get Weather".</p>
+</div>
+
+<script>
+    const apiKey = '1a5bc2c1-a18d-4fe4-b731-ff9bd1c7ec51';
+    const weatherAPI = 'https://api.openweathermap.org/data/2.5/weather';
+
+    document.getElementById('getWeather').addEventListener('click', function () {
+        const city = document.getElementById('city').value;
+        if (city === '') {
+            alert('Please enter a city name.');
+            return;
+        }
+
+        const xhr = new XMLHttpRequest();
+        const url = `${weatherAPI}?q=${city}&appid=${apiKey}&units=metric`;
+
+        xhr.open('GET', url, true);
+
+        xhr.onload = function () {
+            const weatherInfo = document.getElementById('weatherInfo');
+
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                const weatherData = `
+                    <strong>City:</strong> ${response.name} <br>
+                    <strong>Temperature:</strong> ${response.main.temp} °C <br>
+                    <strong>Weather:</strong> ${response.weather[0].description} <br>
+                    <strong>Humidity:</strong> ${response.main.humidity}% <br>
+                    <strong>Wind Speed:</strong> ${response.wind.speed} m/s
+                `;
+                weatherInfo.innerHTML = weatherData;
+            } else {
+                weatherInfo.textContent = 'Could not fetch weather data. Please try again.';
+            }
+        };
+
+        xhr.onerror = function () {
+            document.getElementById('weatherInfo').textContent = 'An error occurred. Please try again.';
+        };
+
+        xhr.send();
+    });
+</script>
+
+</body>
+</html>

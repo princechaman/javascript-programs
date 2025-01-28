@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budgeting App</title>
+    <style>
+        input, button {
+            padding: 8px;
+            margin: 5px;
+        }
+        #entryList {
+            list-style-type: none;
+            padding: 0;
+        }
+        #entryList li {
+            margin-bottom: 10px;
+        }
+        .income {
+            color: green;
+        }
+        .expense {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Budgeting App</h1>
+
+<h2>Income</h2>
+<label for="incomeAmount">Enter Income Amount:</label>
+<input type="number" id="incomeAmount" placeholder="Enter Income">
+<button id="addIncomeButton">Add Income</button>
+
+<h2>Expenses</h2>
+<label for="expenseAmount">Enter Expense Amount:</label>
+<input type="number" id="expenseAmount" placeholder="Enter Expense">
+<button id="addExpenseButton">Add Expense</button>
+
+<h3>Current Balance: $<span id="balance">0.00</span></h3>
+
+<h3>Entries</h3>
+<ol id="entryList"></ol>
+
+<script>
+    let incomeAmountInput = document.getElementById('incomeAmount');
+    let expenseAmountInput = document.getElementById('expenseAmount');
+    let addIncomeButton = document.getElementById('addIncomeButton');
+    let addExpenseButton = document.getElementById('addExpenseButton');
+    let entryList = document.getElementById('entryList');
+    let balanceText = document.getElementById('balance');
+
+    function loadEntries() {
+        const entries = JSON.parse(localStorage.getItem('entries')) || [];
+        const balance = JSON.parse(localStorage.getItem('balance')) || 0;
+
+        entries.forEach(entry => {
+            addEntryToDOM(entry);
+        });
+
+        balanceText.textContent = balance.toFixed(2);
+    }
+
+    function saveEntries(entries, balance) {
+        localStorage.setItem('entries', JSON.stringify(entries));
+        localStorage.setItem('balance', JSON.stringify(balance));
+    }
+
+    function addEntryToDOM(entry) {
+        let li = document.createElement('li');
+        li.textContent = `${entry.type}: $${entry.amount.toFixed(2)}`;
+        li.classList.add(entry.type === 'Income' ? 'income' : 'expense');
+        entryList.appendChild(li);
+    }
+
+    addIncomeButton.addEventListener('click', function() {
+        let amount = parseFloat(incomeAmountInput.value);
+        if (isNaN(amount) || amount <= 0) {
+            alert("Please enter a valid income amount");
+            return;
+        }
+
+        let entries = JSON.parse(localStorage.getItem('entries')) || [];
+        let balance = parseFloat(localStorage.getItem('balance')) || 0;
+
+        entries.push({ type: 'Income', amount });
+        balance += amount;
+
+        saveEntries(entries, balance);
+        addEntryToDOM({ type: 'Income', amount });
+        balanceText.textContent = balance.toFixed(2);
+
+        incomeAmountInput.value = ''; 
+    });
+
+    addExpenseButton.addEventListener('click', function() {
+        let amount = parseFloat(expenseAmountInput.value);
+        if (isNaN(amount) || amount <= 0) {
+            alert("Please enter a valid expense amount");
+            return;
+        }
+
+        let entries = JSON.parse(localStorage.getItem('entries')) || [];
+        let balance = parseFloat(localStorage.getItem('balance')) || 0;
+
+        entries.push({ type: 'Expense', amount });
+        balance -= amount;
+
+        saveEntries(entries, balance);
+        addEntryToDOM({ type: 'Expense', amount });
+        balanceText.textContent = balance.toFixed(2);
+
+        expenseAmountInput.value = ''; 
+    });
+
+    window.onload = function() {
+        loadEntries();
+    };
+</script>
+
+</body>
+</html>

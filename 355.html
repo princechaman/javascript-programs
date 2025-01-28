@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Users</title>
+</head>
+<body>
+
+<h1>Users List</h1>
+<ul id="userList"></ul>
+
+<script>
+    const userList = document.getElementById('userList');
+
+    function fetchUsers() {
+        const xhr = new XMLHttpRequest();
+        
+        const url = 'https://jsonplaceholder.typicode.com/users';
+
+        xhr.open('GET', url, true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const users = JSON.parse(xhr.responseText);
+                displayUsers(users);
+            } else {
+                console.error('Error fetching users:', xhr.statusText);
+            }
+        };
+
+        xhr.onerror = function() {
+            console.error('Request failed');
+        };
+
+        xhr.send();
+    }
+
+    function displayUsers(users) {
+        users.forEach(user => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${user.name} - ${user.email}`;
+            userList.appendChild(listItem);
+        });
+    }
+
+    window.onload = fetchUsers;
+</script>
+
+</body>
+</html>

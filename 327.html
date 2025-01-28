@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #quiz-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        .options button {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #eee;
+            cursor: pointer;
+        }
+        .options button:hover {
+            background-color: #ddd;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <div id="question" class="question"></div>
+        <div id="options" class="options"></div>
+        <div id="result"></div>
+    </div>
+    <script>
+        const quizData = [
+            {
+                question: "What is the capital of France?",
+                options: ["Berlin", "Paris", "Madrid", "Rome"],
+                answer: "Paris"
+            },
+            {
+                question: "What is the largest planet in our solar system?",
+                options: ["Earth", "Mars", "Jupiter", "Saturn"],
+                answer: "Jupiter"
+            },
+            {
+                question: "Who painted the Mona Lisa?",
+                options: ["Michelangelo", "Leonardo da Vinci", "Raphael", "Donatello"],
+                answer: "Leonardo da Vinci"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuiz() {
+            loadProgress();
+            const currentQuestion = quizData[currentQuestionIndex];
+            document.getElementById('question').textContent = currentQuestion.question;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                optionsDiv.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedOption) {
+            const currentQuestion = quizData[currentQuestionIndex];
+            if (selectedOption === currentQuestion.answer) {
+                score++;
+            }
+            currentQuestionIndex++;
+            saveProgress();
+            if (currentQuestionIndex < quizData.length) {
+                loadQuiz();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz-container').innerHTML = `<h2>You scored ${score} out of ${quizData.length}!</h2>`;
+        }
+
+        function saveProgress() {
+            localStorage.setItem('quizProgress', JSON.stringify({
+                currentQuestionIndex,
+                score
+            }));
+        }
+
+        function loadProgress() {
+            const progress = JSON.parse(localStorage.getItem('quizProgress'));
+            if (progress) {
+                currentQuestionIndex = progress.currentQuestionIndex;
+                score = progress.score;
+            }
+        }
+
+        loadQuiz();
+    </script>
+</body>
+</html>

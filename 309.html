@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Font Size</title>
+</head>
+<body>
+    <h1 id="title">Responsive Font Size</h1>
+    <p id="content">
+        Resize the window to see the font size change dynamically.
+    </p>
+
+    <script>
+        function adjustFontSize() {
+            const width = window.innerWidth;
+            const fontSize = width / 50; 
+            document.body.style.fontSize = fontSize + 'px';
+        }
+
+        window.addEventListener('resize', adjustFontSize);
+        window.addEventListener('load', adjustFontSize);
+    </script>
+</body>
+</html>

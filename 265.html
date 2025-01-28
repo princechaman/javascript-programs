@@ -1,0 +1,22 @@
+<html>
+<body>
+    <label>Select a Color : </label>
+    <select id="colorSet">
+        <option value="blue">Blue</option>
+        <option value="red">Red</option>
+        <option value="lightgray">lightgray</option>
+        <option value="yellow">Yellow</option>
+        <option value="green">Green</option>
+    </select>
+    
+    <div id="myDiv">Change My Color!!</div>
+<script>
+    let colorSet = document.getElementById('colorSet');
+    let myDiv = document.getElementById('myDiv');
+    
+    colorSet.addEventListener('change',()=>{
+        myDiv.style.backgroundColor =colorSet.value;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA with Offline Caching</title>
+    <link rel="manifest" href="/manifest.json">
+</head>
+<body>
+
+<h1>PWA with Offline Caching</h1>
+<p>This is a simple Progressive Web App (PWA) with offline caching using local storage.</p>
+<button id="saveButton">Save Data Offline</button>
+<div id="dataDisplay"></div>
+
+<script>
+    const saveButton = document.getElementById('saveButton');
+    const dataDisplay = document.getElementById('dataDisplay');
+
+    saveButton.addEventListener('click', () => {
+        const dataToSave = 'This data is saved for offline use!';
+        localStorage.setItem('offlineData', dataToSave);
+        dataDisplay.textContent = 'Data saved offline!';
+    });
+
+    
+    window.onload = () => {
+        const savedData = localStorage.getItem('offlineData');
+        if (savedData) {
+            dataDisplay.textContent = savedData;
+        } else {
+            dataDisplay.textContent = 'No data saved offline yet.';
+        }
+    };
+</script>
+
+</body>
+</html>

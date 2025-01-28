@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>Dynamic Dropdown</title>
+</head>
+<body>
+    <h1>Dynamic Dropdown</h1>
+    <label for="dropdown">Select an Option:</label>
+    <select id="dropdown">
+        <option value="">Loading...</option>
+    </select>
+
+    <script>
+        const dropdown = document.getElementById('dropdown');
+
+        fetch( 'https://restcountries.com/v3.1/all')
+            .then(response => response.json())
+            .then(data => {
+               
+                dropdown.innerHTML = '<option value="">Select a Country</option>';
+
+                data.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country.cca2; 
+                    option.textContent = country.name.common;
+                    dropdown.appendChild(option);
+                });
+            })
+            .catch(() => {
+                dropdown.innerHTML = '<option value="">Failed to load options</option>';
+            });
+    </script>
+</body>
+</html>

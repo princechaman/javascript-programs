@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Fitness Tracker</title>
+    <style>
+        input, button {
+            padding: 8px;
+            margin: 5px;
+        }
+        #workoutList {
+            list-style-type: none;
+            padding: 0;
+        }
+        #workoutList li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Personal Fitness Tracker</h1>
+
+<h2>Log Workout</h2>
+<label for="workoutType">Workout Type:</label>
+<input type="text" id="workoutType" placeholder="Type">
+<br>
+<label for="workoutDuration">Duration (minutes):</label>
+<input type="number" id="workoutDuration" placeholder="Duration in minutes">
+<br>
+<button id="logWorkoutButton">Log Workout</button>
+
+<h3>Total Calories Burned: <span id="totalCalories">0</span></h3>
+
+<h3>Workout Log</h3>
+<ol id="workoutList"></ol>
+
+<script>
+    let workoutTypeInput = document.getElementById('workoutType');
+    let workoutDurationInput = document.getElementById('workoutDuration');
+    let logWorkoutButton = document.getElementById('logWorkoutButton');
+    let workoutList = document.getElementById('workoutList');
+    let totalCaloriesText = document.getElementById('totalCalories');
+
+    const caloriesPerMinute = {
+        Running: 10,    
+        Cycling: 8,     
+        Swimming: 12,  
+        Walking: 4      
+    };
+
+    function loadWorkouts() {
+        const workouts = JSON.parse(localStorage.getItem('workouts')) || [];
+        const totalCalories = JSON.parse(localStorage.getItem('totalCalories')) || 0;
+
+        workouts.forEach(workout => {
+            addWorkoutToDOM(workout);
+        });
+
+        totalCaloriesText.textContent = totalCalories;
+    }
+
+    function saveWorkouts(workouts, totalCalories) {
+        localStorage.setItem('workouts', JSON.stringify(workouts));
+        localStorage.setItem('totalCalories', JSON.stringify(totalCalories));
+    }
+
+    function addWorkoutToDOM(workout) {
+        let li = document.createElement('li');
+        li.textContent = `${workout.type}: ${workout.duration} minutes - ${workout.caloriesBurned} calories`;
+        workoutList.appendChild(li);
+    }
+
+    logWorkoutButton.addEventListener('click', function() {
+        let workoutType = workoutTypeInput.value.trim();
+        let workoutDuration = parseInt(workoutDurationInput.value);
+
+        if (!workoutType || isNaN(workoutDuration) || workoutDuration <= 0) {
+            alert("Please enter valid workout details");
+            return;
+        }
+
+        const caloriesBurned = caloriesPerMinute[workoutType] ? caloriesPerMinute[workoutType] * workoutDuration : 0;
+
+        if (caloriesBurned === 0) {
+            alert("Please enter a valid workout type (e.g., Running, Cycling, Swimming, Walking)");
+            return;
+        }
+
+        let workouts = JSON.parse(localStorage.getItem('workouts')) || [];
+        let totalCalories = JSON.parse(localStorage.getItem('totalCalories')) || 0;
+
+        let newWorkout = {
+            type: workoutType,
+            duration: workoutDuration,
+            caloriesBurned: caloriesBurned
+        };
+
+        workouts.push(newWorkout);
+        totalCalories += caloriesBurned;
+
+        saveWorkouts(workouts, totalCalories);
+        addWorkoutToDOM(newWorkout);
+        totalCaloriesText.textContent = totalCalories;
+
+        workoutTypeInput.value = ''; 
+        workoutDurationInput.value = '';
+    });
+
+    window.onload = function() {
+        loadWorkouts();
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagination Example</title>
+</head>
+<body>
+
+<h1>User List with Pagination</h1>
+<ul id="userList"></ul>
+
+<div>
+    <button id="prevBtn" disabled>Previous</button>
+    <button id="nextBtn">Next</button>
+</div>
+
+<script>
+    const userList = document.getElementById('userList');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    let currentPage = 1;
+    const usersPerPage = 5; 
+
+    function fetchUsers(page = 1) {
+        const xhr = new XMLHttpRequest();
+        const url = `https://jsonplaceholder.typicode.com/users?_page=${page}&_limit=${usersPerPage}`;
+
+        xhr.open('GET', url, true);
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const users = JSON.parse(xhr.responseText);
+                const totalUsers = parseInt(xhr.getResponseHeader('X-Total-Count'), 10);
+                displayUsers(users);
+                handlePagination(totalUsers);
+            } else {
+                console.error('Error fetching users:', xhr.statusText);
+            }
+        };
+
+        xhr.onerror = function() {
+            console.error('Request failed');
+        };
+
+        xhr.send();
+    }
+
+    function displayUsers(users) {
+        userList.innerHTML = ''; 
+        users.forEach(user => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${user.name} - ${user.email}`;
+            userList.appendChild(listItem);
+        });
+    }
+    
+    function handlePagination(totalUsers) {
+        const totalPages = Math.ceil(totalUsers / usersPerPage);
+        
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+    }
+
+    prevBtn.addEventListener('click', function() {
+        if (currentPage > 1) {
+            currentPage--;
+            fetchUsers(currentPage);
+        }
+    });
+
+    nextBtn.addEventListener('click', function() {
+        currentPage++;
+        fetchUsers(currentPage);
+    });
+
+    window.onload = function() {
+        fetchUsers(currentPage);
+    };
+</script>
+
+</body>
+</html>

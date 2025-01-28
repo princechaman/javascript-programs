@@ -1,0 +1,30 @@
+<html>
+    <head>
+        
+    </head>
+<body>
+    <div id="myDiv">This is a Div!</div>
+    
+    <script>
+        
+        let div = document.getElementById('myDiv');
+        div.addEventListener('contextmenu',function(event){
+           event.preventDefault();
+           let list = document.createElement('ul');
+           
+           for(let i=1;i<=3;i++){
+               let li = document.createElement('li');
+               li.textContent =`Item ${i}`;
+               list.appendChild(li);
+           }
+           document.body.appendChild(list);
+           
+           div.addEventListener('mouseleave',function(){
+                list.remove();
+            });
+        
+        });
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>Multi-Tab Syncing App</title>
+</head>
+<body>
+
+    <h2>Multi-Tab Sync</h2>
+    <input type="text" id="input-field" placeholder="Type something...">
+    <button id="save-btn">Save</button>
+
+    <p>Last synced value:</p>
+    <p id="sync-text">No data yet.</p>
+
+    <script>
+    let button = document.getElementById('save-btn');
+        function updateSyncText() {
+            const syncedValue = localStorage.getItem('syncedData');
+            const syncText = document.getElementById('sync-text');
+
+            if (syncedValue) {
+                syncText.textContent = syncedValue;
+            } else {
+                syncText.textContent = "No data yet.";
+            }
+        }
+
+        window.onload = function() {
+            updateSyncText();
+
+            window.addEventListener('storage', function(event) {
+                if (event.key === 'syncedData') {
+                    updateSyncText();  
+                }
+            });
+        };
+
+        button.addEventListener('click', function() {
+            const inputValue = document.getElementById('input-field');
+             
+            if (inputValue) {
+                localStorage.setItem('syncedData', inputValue);
+                updateSyncText(); 
+            }
+        });
+    </script>
+
+</body>
+</html>

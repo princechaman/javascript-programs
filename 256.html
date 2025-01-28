@@ -1,0 +1,15 @@
+<html>
+<body>
+<p id="content">This is onrignal P tag</p>
+<button id="mybutton">Change Text</button>
+
+<script>
+    let  p = document.getElementById('content');
+    let button = document.getElementById('mybutton');
+    
+    button.addEventListener('click',()=>{
+        p.textContent ="This is changed P tag";
+    });
+</script>
+</body>
+</html>

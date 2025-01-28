@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #settings-container {
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            width: 250px;
+            text-align: center;
+        }
+
+        label, select, input {
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="settings-container">
+        <h2>User Preferences</h2>
+
+        <div>
+            <label for="theme-color">Choose Theme Color:</label>
+            <input type="color" id="theme-color">
+        </div>
+
+        <div>
+            <label for="font-size">Choose Font Size:</label>
+            <select id="font-size">
+                <option value="14px">Small</option>
+                <option value="16px">Medium</option>
+                <option value="18px">Large</option>
+            </select>
+        </div>
+
+        <button id="save-btn">Save Preferences</button>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const savedColor = localStorage.getItem('themeColor');
+            const savedFontSize = localStorage.getItem('fontSize');
+
+            if (savedColor) {
+                document.getElementById('theme-color').value = savedColor;
+                document.body.style.backgroundColor = savedColor;  
+            }
+
+            if (savedFontSize) {
+                document.getElementById('font-size').value = savedFontSize;
+                document.body.style.fontSize = savedFontSize; 
+            }
+        }
+
+        document.getElementById('save-btn').addEventListener('click', function() {
+            const selectedColor = document.getElementById('theme-color').value;
+            const selectedFontSize = document.getElementById('font-size').value;
+
+            localStorage.setItem('themeColor', selectedColor);
+            localStorage.setItem('fontSize', selectedFontSize);
+
+            document.body.style.backgroundColor = selectedColor;
+            document.body.style.fontSize = selectedFontSize;
+        });
+    </script>
+</body>
+</html>

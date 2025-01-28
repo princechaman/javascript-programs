@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tab Manager</title>
+</head>
+<body>
+
+<h1>Tab Manager</h1>
+
+<div id="tabsContainer">
+    
+</div>
+<div id="tabContent">
+</div>
+
+<script>
+    const tabsContainer = document.getElementById('tabsContainer');
+    const tabContent = document.getElementById('tabContent');
+
+    const tabs = [
+        { id: 'tab1', name: 'Tab 1', content: 'This is the content of Tab 1.' },
+        { id: 'tab2', name: 'Tab 2', content: 'This is the content of Tab 2.' },
+        { id: 'tab3', name: 'Tab 3', content: 'This is the content of Tab 3.' }
+    ];
+
+    function createTab(tab) {
+        const tabElement = document.createElement('div');
+        tabElement.id = tab.id;
+        tabElement.textContent = tab.name;
+        tabElement.style.cursor = 'pointer';
+        tabElement.style.display = 'inline-block';
+        tabElement.style.marginRight = '10px';
+        tabElement.addEventListener('click', () => openTab(tab.id));
+        tabsContainer.appendChild(tabElement);
+    }
+
+    function openTab(tabId) {
+        document.querySelectorAll('#tabsContainer div').forEach(tab => {
+            tab.style.fontWeight = 'normal';
+        });
+        
+        document.getElementById(tabId).style.fontWeight = 'bold';
+
+        const activeTab = tabs.find(tab => tab.id === tabId);
+        tabContent.textContent = activeTab.content;
+
+        localStorage.setItem('activeTab', tabId);
+    }
+
+    function loadTabs() {
+        
+        tabs.forEach(tab => createTab(tab));
+
+        const activeTabId = localStorage.getItem('activeTab');
+        if (activeTabId) {
+            openTab(activeTabId);
+        } else {
+            openTab(tabs[0].id);
+        }
+    }
+
+    loadTabs();
+</script>
+
+</body>
+</html>

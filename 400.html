@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptocurrency Tracker</title>
+</head>
+<body>
+
+<h1>Cryptocurrency Tracker</h1>
+
+<button id="fetchButton">Get Latest Prices</button>
+
+<div id="cryptoList"></div>
+
+<script>
+    const fetchButton = document.getElementById('fetchButton');
+    const cryptoList = document.getElementById('cryptoList');
+
+    fetchButton.addEventListener('click', fetchCryptocurrencyData);
+
+    function fetchCryptocurrencyData() {
+        fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,litecoin,ripple,cardano')
+            .then(response => response.json())
+            .then(data => {
+                displayCryptos(data);
+            })
+            .catch(error => {
+                console.error('Error fetching cryptocurrency data:', error);
+            });
+    }
+
+    function displayCryptos(cryptos) {
+        cryptoList.innerHTML = ''; 
+
+        if (cryptos.length === 0) {
+            cryptoList.innerHTML = '<p>No data available.</p>';
+            return;
+        }
+
+        cryptos.forEach(crypto => {
+            const cryptoDiv = document.createElement('div');
+            cryptoDiv.innerHTML = `
+                <h3>${crypto.name} (${crypto.symbol.toUpperCase()})</h3>
+                <p>Price: $${crypto.current_price.toFixed(2)}</p>
+                <p>Market Cap: $${crypto.market_cap.toLocaleString()}</p>
+                <p>24h Change: ${crypto.price_change_percentage_24h.toFixed(2)}%</p>
+                <hr>
+            `;
+            cryptoList.appendChild(cryptoDiv);
+        });
+    }
+</script>
+
+</body>
+</html>

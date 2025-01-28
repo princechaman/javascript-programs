@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop with Persistent Storage</title>
+</head>
+<body>
+
+<h1>Drag and Drop Items</h1>
+
+<div id="dragContainer" style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <div id="item1" class="draggable" draggable="true" style="width: 100px; height: 100px; background-color: lightblue; text-align: center; display: flex; justify-content: center; align-items: center;">Item 1</div>
+    <div id="item2" class="draggable" draggable="true" style="width: 100px; height: 100px; background-color: lightgreen; text-align: center; display: flex; justify-content: center; align-items: center;">Item 2</div>
+    <div id="item3" class="draggable" draggable="true" style="width: 100px; height: 100px; background-color: lightcoral; text-align: center; display: flex; justify-content: center; align-items: center;">Item 3</div>
+</div>
+
+<h2>Drop Area</h2>
+<div id="dropArea" style="width: 400px; height: 200px; border: 2px dashed #000; display: flex; justify-content: center; align-items: center;">
+    Drop here
+</div>
+
+<script>
+    const draggableItems = document.querySelectorAll('.draggable');
+    const dropArea = document.getElementById('dropArea');
+
+    function loadDraggedItems() {
+        const savedItems = JSON.parse(localStorage.getItem('draggedItems')) || [];
+        savedItems.forEach(item => {
+            const element = document.getElementById(item);
+            if (element) {
+                dropArea.appendChild(element);
+            }
+        });
+    }
+
+    function saveDraggedItems() {
+        const itemsInDropArea = [...dropArea.children].map(child => child.id);
+        localStorage.setItem('draggedItems', JSON.stringify(itemsInDropArea));
+    }
+
+    draggableItems.forEach(item => {
+        item.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text', item.id);
+        });
+    });
+
+    dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+    });
+
+    dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const itemId = e.dataTransfer.getData('text');
+        const item = document.getElementById(itemId);
+        dropArea.appendChild(item);
+        saveDraggedItems();
+    });
+
+    loadDraggedItems();
+</script>
+
+</body>
+</html>

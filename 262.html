@@ -1,0 +1,23 @@
+<html>
+<body>
+<button id="mybutton">Hide Image</button>
+<br><br>
+<img id="img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREfalLNAwDp6oxVBXxAJSD0VYZltEApPqlJ5ZJ76_wD97DAxkYW0uUWGC1wjPjZtYKw7s&usqp=CAU">
+
+<script>
+    let img = document.getElementById('img');
+    let button = document.getElementById('mybutton');
+    
+    button.addEventListener('click',()=>{
+       if(img.style.display ==='none'){
+           img.style.display ='block';
+           button.textContent = "Hide Image"
+       }
+       else{
+           img.style.display ='none';
+           button.textContent = "Show Image"
+       }
+    });
+</script>
+</body>
+</html>

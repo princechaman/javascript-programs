@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .loading {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Leaderboard</h1>
+    <table id="leaderboard">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div id="loading" class="loading">Loading leaderboard...</div>
+</div>
+
+<script>
+    const leaderboardTable = document.getElementById('leaderboard').getElementsByTagName('tbody')[0];
+    const loading = document.getElementById('loading');
+
+    function fetchLeaderboard() {
+        fetch('https://fakestoreapi.com/products')  
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                populateLeaderboard(data);
+            })
+            .catch(error => {
+                console.error('Error fetching leaderboard:', error);
+                loading.textContent = 'Failed to load leaderboard.';
+            });
+    }
+
+    function populateLeaderboard(data) {
+        data.forEach((entry, index) => {
+            const row = leaderboardTable.insertRow();
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${entry.title}</td>
+                <td>${entry.price}</td>
+            `;
+        });
+    }
+
+    window.addEventListener('load', fetchLeaderboard);
+</script>
+
+</body>
+</html>

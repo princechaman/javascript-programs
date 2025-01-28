@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Note-Taking App</title>
+</head>
+<body>
+    <h1>Note-Taking App</h1>
+    <textarea id="noteInput" placeholder="Write your note here..." rows="5" cols="30"></textarea>
+    <br>
+    <button id="saveButton">Save Note</button>
+    <h2>Your Notes</h2>
+    <ul id="notesList"></ul>
+
+    <script>
+        const noteInput = document.getElementById('noteInput');
+        const saveButton = document.getElementById('saveButton');
+        const notesList = document.getElementById('notesList');
+
+        function loadNotes() {
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+            notes.forEach(note => addNoteToDOM(note));
+        }
+
+        function saveNotes() {
+            const notes = [];
+            document.querySelectorAll('#notesList li').forEach(li => {
+                notes.push(li.textContent.replace('Delete', '').trim());
+            });
+            localStorage.setItem('notes', JSON.stringify(notes));
+        }
+
+        function addNoteToDOM(noteContent) {
+            const li = document.createElement('li');
+            const deleteButton = document.createElement('button');
+
+            deleteButton.textContent = 'Delete';
+            deleteButton.addEventListener('click', function() {
+                li.remove();
+                saveNotes();
+            });
+
+            li.textContent = noteContent;
+            li.appendChild(deleteButton);
+            notesList.appendChild(li);
+        }
+
+        saveButton.addEventListener('click', function() {
+            const noteContent = noteInput.value.trim();
+            if (noteContent) {
+                addNoteToDOM(noteContent);
+                saveNotes();
+                noteInput.value = '';
+            } else {
+                alert('Please write a note before saving.');
+            }
+        });
+
+        loadNotes();
+    </script>
+</body>
+</html>

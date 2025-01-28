@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation Engine</title>
+</head>
+<body>
+
+<h1>Movie Recommendation Engine</h1>
+
+<label for="genre">Choose a Genre:</label>
+<select id="genre">
+    <option value="28">Action</option>
+    <option value="35">Comedy</option>
+    <option value="18">Drama</option>
+    <option value="10749">Romance</option>
+    <option value="878">Sci-Fi</option>
+</select>
+
+<button id="recommendButton">Get Recommendations</button>
+
+<h2>Recommended Movies:</h2>
+<div id="movieList"></div>
+
+<script>
+    const apiKey = '6ce7e0fd-9b3e-44ed-be83-beb0a514b375'; 
+    const apiUrl = 'https://api.themoviedb.org/3/discover/movie';
+
+    document.getElementById('recommendButton').addEventListener('click', function() {
+        const genreId = document.getElementById('genre').value;
+        getMovieRecommendations(genreId);
+    });
+
+    function getMovieRecommendations(genreId) {
+        fetch(`${apiUrl}?api_key=${apiKey}&with_genres=${genreId}`)
+            .then(response => response.json())
+            .then(data => {
+                displayMovies(data.results);
+            })
+            .catch(error => {
+                console.error('Error fetching movie recommendations:', error);
+            });
+    }
+
+    function displayMovies(movies) {
+        const movieList = document.getElementById('movieList');
+        movieList.innerHTML = ''; 
+
+        if (movies.length === 0) {
+            movieList.innerHTML = '<p>No movies found for this genre.</p>';
+            return;
+        }
+
+        movies.forEach(movie => {
+            const movieDiv = document.createElement('div');
+            movieDiv.innerHTML = `
+                <h3>${movie.title}</h3>
+                <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" style="width: 200px;"/>
+                <p>${movie.overview}</p>
+            `;
+            movieList.appendChild(movieDiv);
+        });
+    }
+</script>
+
+</body>
+</html>

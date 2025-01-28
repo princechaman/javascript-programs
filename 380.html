@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alarm Clock</title>
+</head>
+<body>
+
+<h1>Alarm Clock</h1>
+
+<label for="alarmTime">Set Alarm (HH:MM): </label>
+<input type="time" id="alarmTime">
+<button id="setAlarmButton">Set Alarm</button>
+
+<h3>Set Alarms:</h3>
+<ul id="alarmList"></ul>
+
+<script>
+    const alarmTimeInput = document.getElementById('alarmTime');
+    const setAlarmButton = document.getElementById('setAlarmButton');
+    const alarmList = document.getElementById('alarmList');
+
+    function loadAlarms() {
+        const alarms = JSON.parse(localStorage.getItem('alarms')) || [];
+        alarmList.innerHTML = '';
+        alarms.forEach((alarm, index) => {
+            const li = document.createElement('li');
+            li.textContent = alarm;
+            alarmList.appendChild(li);
+        });
+    }
+
+    function saveAlarms(alarms) {
+        localStorage.setItem('alarms', JSON.stringify(alarms));
+    }
+
+    function setAlarm() {
+        const alarmTime = alarmTimeInput.value;
+        if (alarmTime) {
+            const alarms = JSON.parse(localStorage.getItem('alarms')) || [];
+            alarms.push(alarmTime);
+            saveAlarms(alarms);
+            loadAlarms();
+        } else {
+            alert('Please set a valid alarm time.');
+        }
+    }
+
+    setAlarmButton.addEventListener('click', setAlarm);
+
+    function checkAlarms() {
+        const currentTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const alarms = JSON.parse(localStorage.getItem('alarms')) || [];
+        alarms.forEach(alarm => {
+            if (currentTime === alarm) {
+                alert('Alarm: ' + alarm);
+                const index = alarms.indexOf(alarm);
+                alarms.splice(index, 1);
+                saveAlarms(alarms);
+                loadAlarms();
+            }
+        });
+    }
+
+    setInterval(checkAlarms, 60000);  
+    loadAlarms();
+</script>
+
+</body>
+</html>

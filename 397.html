@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Stock Price Tracker</title>
+</head>
+<body>
+
+<h1>Stock Price Tracker</h1>
+<p>Enter a stock symbol (e.g., AAPL) to get the latest price</p>
+
+<input type="text" id="symbol" placeholder="Stock Symbol (e.g., AAPL)">
+<button onclick="getStockPrice()">Get Stock Price</button>
+
+<div id="stockPrice"></div>
+
+<script>
+    const apiKey = '3d786f4c-e8fe-4050-84e5-805674e5f2ce'; 
+
+    function getStockPrice() {
+        const symbol = document.getElementById('symbol').value;
+        const url = `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${apiKey}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.c) {
+                    document.getElementById('stockPrice').innerHTML = `
+                        <h3>Stock: ${symbol.toUpperCase()}</h3>
+                        <p>Current Price: $${data.c}</p>
+                        <p>High: $${data.h}</p>
+                        <p>Low: $${data.l}</p>
+                        <p>Open: $${data.o}</p>
+                        <p>Previous Close: $${data.pc}</p>
+                    `;
+                } else {
+                    document.getElementById('stockPrice').innerHTML = `<p>Stock not found. Please try again.</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('stockPrice').innerHTML = `<p>Something went wrong. Try again later.</p>`;
+            });
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

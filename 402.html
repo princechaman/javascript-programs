@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogging App</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #blog-content {
+            width: 80%;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+        #status {
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div id="blog-content">
+        <h1>My Blog</h1>
+        <textarea id="blog-text" placeholder="Start writing your blog here..."></textarea>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        const blogText = document.getElementById('blog-text');
+        const status = document.getElementById('status');
+        let timeoutId;
+
+        function saveBlogContent() {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                const content = blogText.value;
+                status.textContent = 'Saving...';
+
+                fetch('/save-blog', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ content }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    status.textContent = 'Saved at ' + new Date().toLocaleTimeString();
+                })
+                .catch(error => {
+                    console.error('Error saving blog:', error);
+                    status.textContent = 'Error saving';
+                });
+            }, 1000);
+        }
+
+        blogText.addEventListener('input', saveBlogContent);
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<html>
+<body>
+    <h2>Visit Counter</h2>
+    <p>You have visited this page <span id="visitCount">0</span> times.</p>
+
+    <script>
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function setCookie(name, value, days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Expiry date
+            var expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        var visitCount = getCookie("visitCount");
+
+        if (visitCount) {
+            visitCount = parseInt(visitCount) + 1;
+        } else {
+            visitCount = 1;
+        }
+
+        document.getElementById("visitCount").textContent = visitCount;
+
+        setCookie("visitCount", visitCount, 30);
+    </script>
+
+</body>
+</html>

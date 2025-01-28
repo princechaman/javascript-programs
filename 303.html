@@ -1,0 +1,19 @@
+<html>
+<body>
+
+  <h1>Change Image Source</h1>
+  <img id="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEZ4YczNdyf5ATB_GPWKnXNfYe3c6KBxzp6g&s" alt="Placeholder Image" width="300" height="200">
+  <br><br>
+  <button id="imageButton">Change Image</button>
+
+  <script>
+    const image = document.getElementById('image');
+    const button = document.getElementById('imageButton');
+
+    button.addEventListener('click', function() {
+      image.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbEU9hXMG3OJNivnpBiUw08xbb6CpZG06XhQ&s';
+    });
+  </script>
+
+</body>
+</html>

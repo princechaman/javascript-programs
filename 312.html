@@ -1,0 +1,24 @@
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Screen Resolution</h1>
+    <p>Width: <span id="width"></span></p>
+    <p>Height: <span id="height"></span></p>
+
+    <script>
+        const width = window.screen.width;
+        const height = window.screen.height;
+
+        document.getElementById('width').textContent = width;
+        document.getElementById('height').textContent = height;
+    </script>
+</body>
+</html>

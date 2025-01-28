@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Star Rating System</title>
+  <style>
+    .stars {
+      display: flex;
+      cursor: pointer;
+    }
+    .stars span {
+      font-size: 2rem;
+      color: lightgray;
+      transition: color 0.2s;
+    }
+    .stars span.hovered,
+    .stars span.selected {
+      color: gold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Rate Us</h1>
+  <div class="stars" id="starRating">
+    <span data-value="1">★</span>
+    <span data-value="2">★</span>
+    <span data-value="3">★</span>
+    <span data-value="4">★</span>
+    <span data-value="5">★</span>
+  </div>
+  <p id="ratingValue">Rating: 0</p>
+
+  <script>
+    const stars = document.querySelectorAll('#starRating span');
+    const ratingValue = document.getElementById('ratingValue');
+    let currentRating = 0;
+
+    stars.forEach(star => {
+      star.addEventListener('mouseover', () => {
+        resetStars();
+        highlightStars(star.dataset.value);
+      });
+
+      star.addEventListener('click', () => {
+        currentRating = star.dataset.value;
+        updateRating();
+      });
+
+      star.addEventListener('mouseout', () => {
+        resetStars();
+        if (currentRating > 0) highlightStars(currentRating);
+      });
+    });
+
+    function highlightStars(limit) {
+      stars.forEach(star => {
+        if (star.dataset.value <= limit) {
+          star.classList.add('hovered');
+        }
+      });
+    }
+
+    function resetStars() {
+      stars.forEach(star => star.classList.remove('hovered', 'selected'));
+    }
+
+    function updateRating() {
+      resetStars();
+      highlightStars(currentRating);
+      stars.forEach(star => {
+        if (star.dataset.value <= currentRating) {
+          star.classList.add('selected');
+        }
+      });
+      ratingValue.textContent = `Rating: ${currentRating}`;
+    }
+  </script>
+
+</body>
+</html>

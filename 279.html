@@ -1,0 +1,25 @@
+<html>
+<body>
+<h1>List Of Items</h1>
+<ul id="myList">
+    <li>Sonu</li>
+    <li>Kiran</li>
+    <li>Ravi</li>
+    <li>Asha</li>
+</ul><br>
+
+<button id="btn">Sort List</button>
+<script>
+    let btn = document.getElementById('btn');
+    let ulElement = document.getElementById('myList');
+    let list = Array.from(ulElement.children);
+    btn.addEventListener('click',()=>{
+        
+        list.sort((a, b) => a.textContent.localeCompare(b.textContent));
+        ulElement.innerHTML = '';
+        list.forEach((item)=>{ulElement.appendChild(item)});
+    });
+    
+</script>
+</body>
+</html>

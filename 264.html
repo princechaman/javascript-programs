@@ -1,0 +1,21 @@
+<html>
+<body>
+<p id="p">This is a P tag </p>
+<input id="input" type="number" placeholder="Enter font Size..">
+
+<script>
+    let input = document.getElementById('input');
+    let p = document.getElementById('p');
+    
+    input.addEventListener('input',()=>{
+        let value = input.value;
+        if(value){
+            p.style.fontSize = value +"px";
+        }
+        else {
+        p.style.fontSize = "initial"; 
+      }
+    });
+</script>
+</body>
+</html>

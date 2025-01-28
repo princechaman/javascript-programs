@@ -1,0 +1,17 @@
+<html>
+<body>
+<h1>Image Rotate</h1>
+    <img id="img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREfalLNAwDp6oxVBXxAJSD0VYZltEApPqlJ5ZJ76_wD97DAxkYW0uUWGC1wjPjZtYKw7s&usqp=CAU">
+    <br> <br>
+    <button id="myButton">Rotate Image</button>
+    
+    <script>
+        let img=document.getElementById('img');
+        let button=document.getElementById('myButton');
+        
+        button.addEventListener('click',()=>{
+            img.style.rotate = '90deg';
+        });
+    </script>
+</body>
+</html>

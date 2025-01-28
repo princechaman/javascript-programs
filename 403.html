@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Form</title>
+</head>
+<body>
+
+<h1>Feedback Form</h1>
+
+<form id="feedbackForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="message">Feedback:</label><br>
+    <textarea id="message" name="message" rows="4" cols="50" required></textarea><br><br>
+
+    <button type="submit">Submit Feedback</button>
+</form>
+
+<div id="responseMessage"></div>
+
+<script>
+    const feedbackForm = document.getElementById('feedbackForm');
+    const responseMessage = document.getElementById('responseMessage');
+
+    feedbackForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        const feedbackData = {
+            name: name,
+            email: email,
+            message: message
+        };
+
+        fetch('https://your-server-url.com/submit-feedback', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(feedbackData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                responseMessage.textContent = 'Thank you for your feedback!';
+                feedbackForm.reset();
+            } else {
+                responseMessage.textContent = 'Something went wrong. Please try again later.';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            responseMessage.textContent = 'An error occurred. Please try again later.';
+        });
+    });
+</script>
+
+</body>
+</html>

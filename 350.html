@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Music Search</title>
+</head>
+<body>
+
+<h1>Music Search</h1>
+
+<label for="search">Search for a song: </label>
+<input type="text" id="search" placeholder="Enter song name">
+<button id="searchButton">Search</button>
+
+<div id="musicResults"></div>
+
+<script>
+    const searchInput = document.getElementById('search');
+    const searchButton = document.getElementById('searchButton');
+    const musicResults = document.getElementById('musicResults');
+
+    const accessToken = 'BQCtInR96TpaRjdZuR9fFHw4ob9LSEZgztkEfbTrGd2xCJ-kDM3efPc-gHrbJ6OBgIxpi6s_JPjUEv4nBc4vF_k8anXIJeJE7lByO4lWZ-wnxxhXzFR52y9liksCPESY1ObC1YQuZuLfctSf7P3HrT1dac2GtaazCiMx9PDeLzGnMRp9MVejrNvwYJEh0ajiJEYYQ9lP1quJmiFNJEgTsxYZLkR9V4NRYfHHZZA9W_Tn2yDqBW5XtyDDT4FKcf7by3y6lmwNkfupkM3VPnCJ_h_GbdzRcpb6';  
+
+    function searchMusic() {
+        const query = searchInput.value;
+        if (query !== '') {
+            fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=5`, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                musicResults.innerHTML = '';
+                data.tracks.items.forEach(track => {
+                    musicResults.innerHTML += `
+                        <div>
+                            <h3>${track.name}</h3>
+                            <p>Artist: ${track.artists[0].name}</p>
+                            <a href="${track.external_urls.spotify}" target="_blank">Listen on Spotify</a>
+                        </div>
+                    `;
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                musicResults.innerHTML = `<p>Something went wrong. Try again later.</p>`;
+            });
+        } else {
+            musicResults.innerHTML = `<p>Please enter a song name.</p>`;
+        }
+    }
+
+    searchButton.addEventListener('click', searchMusic);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map-based App</title>
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Google Maps - Place a Marker</h1>
+
+<div id="map"></div>
+
+<script>
+    function initMap() {
+        const center = { lat: 40.7128, lng: -74.0060 };
+        
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 12,
+            center: center,
+        });
+
+        const marker = new google.maps.Marker({
+            position: center,
+            map: map,
+            title: "Click to move marker",
+        });
+
+        google.maps.event.addListener(map, 'click', function(event) {
+            const clickedLocation = event.latLng;
+            marker.setPosition(clickedLocation);  
+            alert('Marker moved to: ' + clickedLocation.lat() + ', ' + clickedLocation.lng());
+        });
+    }
+</script>
+
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=e2aa6aa5-7038-4653-b6f2-d19b606fc97c&callback=initMap"
+    async
+    defer>
+</script>
+
+</body>
+</html>

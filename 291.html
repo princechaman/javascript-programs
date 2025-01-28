@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Window Size</title>
+</head>
+<body>
+
+  <h1>Browser Window Dimensions</h1>
+  <p id="dimensions">Width: 0px, Height: 0px</p>
+
+  <script>
+    const dimensionsDisplay = document.getElementById('dimensions');
+
+    function updateDimensions() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      dimensionsDisplay.textContent = `Width: ${width}px, Height: ${height}px`;
+    }
+
+    window.addEventListener('resize', updateDimensions);
+    updateDimensions();
+  </script>
+
+</body>
+</html>

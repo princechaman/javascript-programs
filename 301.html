@@ -1,0 +1,53 @@
+<html>
+<head>
+  <style>
+    #container {
+      width: 500px;
+      height: 300px;
+      border: 1px solid black;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #movingDiv {
+      width: 50px;
+      height: 50px;
+      background-color: blue;
+      position: absolute;
+      top: 125px;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Animate a Div</h1>
+  <div id="container">
+    <div id="movingDiv"></div>
+  </div>
+  <button id="moveLeft">Move Left</button>
+  <button id="moveRight">Move Right</button>
+
+  <script>
+    const movingDiv = document.getElementById('movingDiv');
+    const moveLeftBtn = document.getElementById('moveLeft');
+    const moveRightBtn = document.getElementById('moveRight');
+    let position = 0;
+
+    moveRightBtn.addEventListener('click', () => {
+      if (position < 450) { 
+        position += 10;
+        movingDiv.style.left = position + 'px';
+      }
+    });
+
+    moveLeftBtn.addEventListener('click', () => {
+      if (position > 0) { 
+        position -= 10;
+        movingDiv.style.left = position + 'px';
+      }
+    });
+  </script>
+
+</body>
+</html>

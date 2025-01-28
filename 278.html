@@ -1,0 +1,26 @@
+<html>
+<body>
+    <input id="input" type="number"><br><br>
+    <button id="btn">Add Row</button><br><br>
+    <table id="myTable" border="1px"></table>
+    
+    <script>
+    let input = document.getElementById('input');
+    let btn = document.getElementById('btn');
+    let table = document.getElementById('myTable');
+    
+    btn.addEventListener('click',()=>{
+        table.innerHTML = '';
+         for(let i=0;i<parseInt(input.value);i++){
+        let row = document.createElement('tr');
+        let call = document.createElement('td');
+        call.textContent = "item";
+        call.style.border = "1px solid black";
+        row.appendChild(call);
+        table.appendChild(row);
+    }
+    });
+   
+    </script>
+</body>
+</html>

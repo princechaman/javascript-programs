@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple News App</title>
+</head>
+<body>
+    <h1>News Aggregator</h1>
+    <button id="fetchNewsButton">Fetch News</button>
+    <div id="newsContainer"></div>
+
+    <script>
+        document.getElementById('fetchNewsButton').addEventListener('click', function () {
+            const apiKey = 'YOUR_NEWSAPI_KEY';
+            const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
+            const newsContainer = document.getElementById('newsContainer');
+
+            newsContainer.innerHTML = 'Loading...';
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    newsContainer.innerHTML = '';
+                    data.articles.forEach(article => {
+                        const div = document.createElement('div');
+                        div.innerHTML = `<h2>${article.title}</h2><p>${article.description || ''}</p>`;
+                        newsContainer.appendChild(div);
+                    });
+                })
+                .catch(() => {
+                    newsContainer.innerHTML = 'Failed to fetch news.';
+                });
+        });
+    </script>
+</body>
+</html>

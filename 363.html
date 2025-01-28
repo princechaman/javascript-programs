@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Weather App</title>
+</head>
+<body>
+
+<h1>Weather App</h1>
+<input type="text" id="city" placeholder="Enter city name">
+<button id="getWeather">Get Weather</button>
+<p id="result"></p>
+
+<script>
+    const apiKey = 'acabe70e-19d8-42bf-98e0-b810bbd2b422'; 
+
+    document.getElementById('getWeather').addEventListener('click', function () {
+        const city = document.getElementById('city').value.trim();
+        const result = document.getElementById('result');
+
+        if (!city) {
+            result.textContent = 'Please enter a city name.';
+            return;
+        }
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const data = JSON.parse(xhr.responseText);
+                result.textContent = `City: ${data.name}, Temp: ${data.main.temp}°C, Weather: ${data.weather[0].description}`;
+            } else {
+                result.textContent = 'Error fetching weather. Check the city name.';
+            }
+        };
+
+        xhr.onerror = function () {
+            result.textContent = 'Network error. Please try again.';
+        };
+
+        xhr.send();
+    });
+</script>
+
+</body>
+</html>

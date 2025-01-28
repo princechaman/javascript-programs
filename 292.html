@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filter List with Dropdown</title>
+</head>
+<body>
+
+  <h1>Filter Items</h1>
+
+  <label for="categoryFilter">Select a category:</label>
+  <select id="categoryFilter">
+    <option value="all">All</option>
+    <option value="fruits">Fruits</option>
+    <option value="vegetables">Vegetables</option>
+    <option value="dairy">Dairy</option>
+  </select>
+
+  <ul id="itemList">
+    <li data-category="fruits">Apple</li>
+    <li data-category="fruits">Banana</li>
+    <li data-category="vegetables">Carrot</li>
+    <li data-category="vegetables">Spinach</li>
+    <li data-category="dairy">Milk</li>
+    <li data-category="dairy">Cheese</li>
+  </ul>
+
+  <script>
+    const dropdown = document.getElementById('categoryFilter');
+    const items = document.querySelectorAll('#itemList li');
+
+    dropdown.addEventListener('change', () => {
+      const selectedCategory = dropdown.value;
+      items.forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        if (selectedCategory === 'all' || itemCategory === selectedCategory) {
+          item.style.display = ''; 
+        } else {
+          item.style.display = 'none'; 
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

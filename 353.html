@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis Tool</title>
+</head>
+<body>
+
+<h1>Sentiment Analysis</h1>
+
+<label for="textInput">Enter Text:</label>
+<textarea id="textInput" rows="5" cols="50"></textarea><br><br>
+
+<button id="analyzeButton">Analyze Sentiment</button>
+
+<h3>Sentiment Result:</h3>
+<p id="sentimentResult"></p>
+
+<script>
+    const analyzeButton = document.getElementById('analyzeButton');
+    const textInput = document.getElementById('textInput');
+    const sentimentResult = document.getElementById('sentimentResult');
+
+    const apiKey = 'ed364386-77e2-4b56-aef9-f129f6339498'; 
+
+    analyzeButton.addEventListener('click', function() {
+        const text = textInput.value;
+        
+        if (text !== '') {
+            fetch('https://twinword-sentiment-analysis.p.rapidapi.com/analyze/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-RapidAPI-Host': 'twinword-sentiment-analysis.p.rapidapi.com',
+                    'X-RapidAPI-Key': apiKey
+                },
+                body: new URLSearchParams({
+                    'text': text
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const sentiment = data.type; 
+                sentimentResult.textContent = `Sentiment: ${sentiment}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                sentimentResult.textContent = 'An error occurred while analyzing sentiment.';
+            });
+        } else {
+            sentimentResult.textContent = 'Please enter some text to analyze.';
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<html>
+<body>
+
+  <h1>Click Counter</h1>
+  <div id="buttonDiv">
+    <button data-count="0">Button 1</button>
+    <button data-count="0">Button 2</button>
+    <button data-count="0">Button 3</button>
+  </div>
+
+  <script>
+    const buttonDiv = document.getElementById('buttonDiv');
+
+    buttonDiv.addEventListener('click', (event) => {
+      if (event.target.tagName === 'BUTTON') {
+        let count = parseInt(event.target.getAttribute('data-count'));
+        count++;
+        event.target.setAttribute('data-count', count);
+        event.target.textContent = `Button ${event.target.textContent.split(' ')[1]} (${count} clicks)`;
+      }
+    });
+  </script>
+
+</body>
+</html>

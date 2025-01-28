@@ -1,0 +1,90 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Preferences</title>
+    <style>
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        #preferencesDisplay {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Product Preferences</h2>
+
+    <form id="preferencesForm">
+        <label>
+            <input type="checkbox" name="preferences" value="electronics"> Electronics
+        </label>
+        <label>
+            <input type="checkbox" name="preferences" value="clothing"> Clothing
+        </label>
+        <label>
+            <input type="checkbox" name="preferences" value="books"> Books
+        </label>
+        <label>
+            <input type="checkbox" name="preferences" value="home_decor"> Home Decor
+        </label>
+        <button type="button" onclick="savePreferences()">Save Preferences</button>
+    </form>
+
+    <div id="preferencesDisplay"></div>
+
+    <script>
+        function savePreferences() {
+            let selectedPreferences = [];
+            let checkboxes = document.querySelectorAll('input[name="preferences"]:checked');
+            checkboxes.forEach(checkbox => {
+                selectedPreferences.push(checkbox.value);
+            });
+
+            document.cookie = "productPreferences=" + JSON.stringify(selectedPreferences) + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+            displayPreferences();
+        }
+
+        function getPreferences() {
+            let name = "productPreferences=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return JSON.parse(c.substring(name.length, c.length));
+                }
+            }
+            return [];
+        }
+
+        function displayPreferences() {
+            let preferences = getPreferences();
+            let display = document.getElementById('preferencesDisplay');
+            display.innerHTML = "<h3>Your Saved Preferences:</h3>";
+            if (preferences.length > 0) {
+                let list = document.createElement('ul');
+                preferences.forEach(pref => {
+                    let item = document.createElement('li');
+                    item.textContent = pref;
+                    list.appendChild(item);
+                });
+                display.appendChild(list);
+            } else {
+                display.innerHTML += "<p>No preferences saved.</p>";
+            }
+        }
+
+        window.onload = displayPreferences;
+    </script>
+
+</body>
+</html>

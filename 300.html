@@ -1,0 +1,25 @@
+<html>
+<body>
+
+  <h1>Toggle Password Visibility</h1>
+  <label>Password:</label>
+  <input type="password" id="password" placeholder="Enter your password">
+  <button id="btn">Show</button>
+
+  <script>
+    let input = document.getElementById('password');
+    let btn = document.getElementById('btn');
+
+    btn.addEventListener('click', function() {
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = 'Hide';
+      } else {
+        input.type = 'password';
+        btn.textContent = 'Show';
+      }
+    });
+  </script>
+
+</body>
+</html>

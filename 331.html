@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .delete-button{
+                margin-left: 20px;
+            }
+        </style>
+        <title>Wish List</title>
+    </head>
+<body>
+<h1>Wish List</h1>
+<label>Wish List :</label>
+<input type="text" id="taskInput" placeholder="Enter Your Wish">
+<button id="addButton">Add to Wish List</button>
+<ol id="taskList"></ol>
+
+<script>
+    let taskInput = document.getElementById('taskInput'); 
+    let addButton = document.getElementById('addButton');
+    let taskList = document.getElementById('taskList');
+
+    function loadTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.forEach(task => {
+            addTaskToDOM(task);
+        });
+    }
+
+    function saveTasks() {
+        const tasks = [];
+        document.querySelectorAll('#taskList li').forEach(li => {
+            tasks.push(li.textContent.replace('Delete', '').trim());
+        });
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function addTaskToDOM(taskValue) {
+        let li = document.createElement('li');
+        let button = document.createElement('button');
+        button.classList.add('delete-button');
+        button.textContent = 'Remove';
+        button.addEventListener('click', function() {
+            li.remove();
+            saveTasks();
+        });
+        li.textContent = taskValue;
+        li.appendChild(button);
+        taskList.appendChild(li);
+    }
+
+    addButton.addEventListener('click', function() {
+        let taskValue = taskInput.value;
+        if (taskValue !== '') {
+            addTaskToDOM(taskValue);
+            saveTasks();
+            taskInput.value = "";
+        } else {
+            alert("Please enter a task");
+        }
+    });
+
+    loadTasks();
+</script>
+</body>
+</html>

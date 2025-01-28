@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personalized Greeting</title>
+</head>
+<body>
+    <h2 id="greeting">Welcome!</h2>
+    <label>Enter your name: <input type="text" id="userName"></label>
+    <button onclick="saveName()">Save Name</button>
+
+    <script>
+        function getCookie(name) {
+            const cookies = document.cookie.split('; ');
+            for (const cookie of cookies) {
+                const [key, value] = cookie.split('=');
+                if (key === name) return value;
+            }
+            return null;
+        }
+
+        function setCookie(name, value, days = 7) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+        }
+
+        function saveName() {
+            const name = document.getElementById('userName').value;
+            if (name) {
+                setCookie('userName', name);
+                displayGreeting(name);
+            } else {
+                alert('Please enter your name');
+            }
+        }
+
+        function displayGreeting(name) {
+            document.getElementById('greeting').textContent = `Welcome, ${name}!`;
+        }
+
+        const savedName = getCookie('userName');
+        if (savedName) {
+            displayGreeting(savedName);
+        }
+    </script>
+</body>
+</html>

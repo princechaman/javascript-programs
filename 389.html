@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Editor</title>
+</head>
+<body>
+
+<h1>Blog Editor</h1>
+
+<label for="blogTitle">Title:</label>
+<input type="text" id="blogTitle" placeholder="Enter blog title">
+
+<br><br>
+
+<label for="blogContent">Content:</label>
+<textarea id="blogContent" rows="10" cols="50" placeholder="Write your blog here..."></textarea>
+
+<br><br>
+
+<p>Status: <span id="status">Not saved</span></p>
+
+<script>
+    const titleInput = document.getElementById('blogTitle');
+    const contentInput = document.getElementById('blogContent');
+    const statusText = document.getElementById('status');
+
+    function loadBlog() {
+        const savedTitle = sessionStorage.getItem('blogTitle');
+        const savedContent = sessionStorage.getItem('blogContent');
+        if (savedTitle) titleInput.value = savedTitle;
+        if (savedContent) contentInput.value = savedContent;
+    }
+
+    function autoSave() {
+        sessionStorage.setItem('blogTitle', titleInput.value);
+        sessionStorage.setItem('blogContent', contentInput.value);
+        statusText.textContent = 'Saved';
+        setTimeout(() => statusText.textContent = 'Not saved', 2000);
+    }
+
+    titleInput.addEventListener('input', autoSave);
+    contentInput.addEventListener('input', autoSave);
+
+    loadBlog();
+</script>
+
+</body>
+</html>

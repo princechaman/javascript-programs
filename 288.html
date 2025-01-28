@@ -1,0 +1,27 @@
+<html>
+<body>
+
+  <form id="myForm">
+    <label for="requiredInput">Enter your name:</label>
+    <br><br>
+    <input type="text" id="requiredInput" placeholder="Enter your name">
+    <br><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('myForm');
+    const input = document.getElementById('requiredInput');
+
+    form.addEventListener('submit', (event) => {
+      if (input.value.trim() === '') {
+        event.preventDefault(); 
+        alert('This field is required. Please enter a value.');
+        input.focus(); 
+      }
+    });
+  </script>
+
+</body>
+</html>
+
